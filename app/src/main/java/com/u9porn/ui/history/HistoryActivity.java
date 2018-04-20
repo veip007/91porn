@@ -54,7 +54,7 @@ public class HistoryActivity extends MvpActivity<HistoryView, HistoryPresenter> 
         mUnLimit91Adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                goToPlayVideo((V9PornItem) adapter.getItem(position));
+                goToPlayVideo((V9PornItem) adapter.getItem(position), presenter.getPlayBackEngine());
             }
         });
         mUnLimit91Adapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {

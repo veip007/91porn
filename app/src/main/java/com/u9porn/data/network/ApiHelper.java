@@ -60,9 +60,9 @@ public interface ApiHelper {
 
     Observable<F9PornContent> loadPorn9ForumContent(Long tid, final boolean isNightModel);
 
-    Observable<UpdateVersion> checkUpdate(String url);
+    Observable<UpdateVersion> checkUpdate();
 
-    Observable<Notice> checkNewNotice(String url);
+    Observable<Notice> checkNewNotice();
 
     Observable<BaseResult<List<MeiZiTu>>> listMeiZiTu(String tag, int page, boolean pullToRefresh);
 

@@ -9,6 +9,7 @@ import com.u9porn.data.DataManager;
 import com.u9porn.data.model.F9PornContent;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RxSchedulersHelper;
+import com.u9porn.utils.AppUtils;
 
 import javax.inject.Inject;
 
@@ -31,7 +32,8 @@ public class Browse9Presenter extends MvpBasePresenter<Browse9View> implements I
     }
 
     @Override
-    public void loadContent(Long tid, final boolean isNightModel) {
+    public void loadContent(Long tid) {
+        final boolean isNightModel = dataManager.isOpenNightMode();
         dataManager.loadPorn9ForumContent(tid, isNightModel)
                 .compose(RxSchedulersHelper.<F9PornContent>ioMainThread())
                 .compose(provider.<F9PornContent>bindUntilEvent(Lifecycle.Event.ON_DESTROY))
@@ -53,7 +55,7 @@ public class Browse9Presenter extends MvpBasePresenter<Browse9View> implements I
                             @Override
                             public void run(@NonNull Browse9View view) {
                                 view.showContent();
-                                view.loadContentSuccess(f9PornContent);
+                                view.loadContentSuccess(f9PornContent.getContent(), f9PornContent.getImageList(),isNightModel);
                             }
                         });
                     }
@@ -68,5 +70,15 @@ public class Browse9Presenter extends MvpBasePresenter<Browse9View> implements I
                         });
                     }
                 });
+    }
+
+    @Override
+    public void setNeedShowTipFirstViewForum9Content(boolean needShow) {
+        dataManager.setNeedShowTipFirstViewForum9Content(needShow);
+    }
+
+    @Override
+    public boolean isNeedShowTipFirstViewForum9Content() {
+        return dataManager.isNeedShowTipFirstViewForum9Content();
     }
 }

@@ -26,8 +26,7 @@ public class JiaoZiVideoPlayerActivity extends BasePlayVideo {
     @Override
     public void playVideo(String title, String videoUrl, String name, String thumImgUrl) {
         jzVideoPlayerStandard.setVisibility(View.VISIBLE);
-        String proxyUrl = httpProxyCacheServer.getProxyUrl(videoUrl);
-        jzVideoPlayerStandard.setUp(proxyUrl, JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, title);
+        jzVideoPlayerStandard.setUp(videoUrl, JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, title);
         //自动播放
         jzVideoPlayerStandard.startButton.performClick();
         if (!TextUtils.isEmpty(thumImgUrl)) {

@@ -53,9 +53,6 @@ public class FavoriteActivity extends MvpActivity<FavoriteView, FavoritePresente
     @Inject
     protected FavoritePresenter favoritePresenter;
 
-    @Inject
-    protected DataManager dataManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +76,7 @@ public class FavoriteActivity extends MvpActivity<FavoriteView, FavoritePresente
         mUnLimit91Adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                goToPlayVideo((V9PornItem) adapter.getItem(position));
+                goToPlayVideo((V9PornItem) adapter.getItem(position),presenter.getPlayBackEngine());
             }
         });
 
@@ -113,7 +110,7 @@ public class FavoriteActivity extends MvpActivity<FavoriteView, FavoritePresente
                 presenter.loadRemoteFavoriteData(false);
             }
         });
-        boolean needRefresh = dataManager.isFavoriteNeedRefresh();
+        boolean needRefresh = presenter.isFavoriteNeedRefresh();
         presenter.loadRemoteFavoriteData(needRefresh);
     }
 
@@ -171,7 +168,7 @@ public class FavoriteActivity extends MvpActivity<FavoriteView, FavoritePresente
 
     @Override
     public void setFavoriteData(List<V9PornItem> v9PornItemList) {
-        dataManager.setFavoriteNeedRefresh(false);
+        presenter.setFavoriteNeedRefresh(false);
         mUnLimit91Adapter.setNewData(v9PornItemList);
     }
 
@@ -200,7 +197,7 @@ public class FavoriteActivity extends MvpActivity<FavoriteView, FavoritePresente
     @Override
     public void deleteFavoriteSucc(String message) {
         //标志删除失败，下次加载服务器数据，清空缓存
-        dataManager.setFavoriteNeedRefresh(true);
+        presenter.setFavoriteNeedRefresh(true);
         dismissDialog();
         showMessage(message, TastyToast.SUCCESS);
     }

@@ -175,4 +175,29 @@ public class ProxyPresenter extends MvpBasePresenter<ProxyView> implements IProx
     public void exitTest() {
         dataManager.existProxyTest();
     }
+
+    @Override
+    public String getProxyIpAddress() {
+        return dataManager.getProxyIpAddress();
+    }
+
+    @Override
+    public int getProxyPort() {
+        return dataManager.getProxyPort();
+    }
+
+    @Override
+    public void setProxyIpAddress(String proxyIpAddress) {
+        dataManager.setProxyIpAddress(proxyIpAddress);
+    }
+
+    @Override
+    public void setProxyPort(int proxyPort) {
+        dataManager.setProxyPort(proxyPort);
+    }
+
+    @Override
+    public void setOpenHttpProxy(boolean openHttpProxy) {
+        dataManager.setOpenHttpProxy(openHttpProxy);
+    }
 }

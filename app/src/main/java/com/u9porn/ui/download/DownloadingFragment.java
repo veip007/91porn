@@ -158,7 +158,7 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
 
     private void startDownload(V9PornItem v9PornItem, View view, boolean isForceReDownload) {
         boolean isDownloadNeedWifi = dataManager.isDownloadVideoNeedWifi();
-        presenter.downloadVideo(v9PornItem, isDownloadNeedWifi, isForceReDownload);
+        presenter.downloadVideo(v9PornItem, isForceReDownload);
         ((ImageView) view).setImageResource(R.drawable.pause_download);
         Intent intent = new Intent(getContext(), DownloadVideoService.class);
         context.startService(intent);

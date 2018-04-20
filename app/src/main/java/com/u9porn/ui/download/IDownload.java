@@ -9,7 +9,7 @@ import com.u9porn.data.db.entity.V9PornItem;
  */
 
 public interface IDownload extends IBaseDownload {
-    void downloadVideo(V9PornItem v9PornItem, boolean isDownloadNeedWifi, boolean isForceReDownload, DownloadPresenter.DownloadListener downloadListener);
+    void downloadVideo(V9PornItem v9PornItem, boolean isForceReDownload, DownloadPresenter.DownloadListener downloadListener);
 
     void loadDownloadingData();
 

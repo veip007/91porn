@@ -64,12 +64,12 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
     }
 
     @Override
-    public void downloadVideo(V9PornItem v9PornItem, boolean isDownloadNeedWifi, boolean isForceReDownload) {
-        downloadVideo(v9PornItem, isDownloadNeedWifi, isForceReDownload, null);
+    public void downloadVideo(V9PornItem v9PornItem, boolean isForceReDownload) {
+        downloadVideo(v9PornItem, isForceReDownload, null);
     }
 
     @Override
-    public void downloadVideo(V9PornItem v9PornItem, boolean isDownloadNeedWifi, boolean isForceReDownload, DownloadListener downloadListener) {
+    public void downloadVideo(V9PornItem v9PornItem, boolean isForceReDownload, DownloadListener downloadListener) {
         V9PornItem tmp = dataManager.findV9PornItemByViewKey(v9PornItem.getViewKey());
         if (tmp == null || tmp.getVideoResultId() == 0) {
             if (downloadListener != null) {
@@ -136,6 +136,7 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
         Logger.d("视频连接：" + videoResult.getVideoUrl());
         String path = v9PornItem.getDownLoadPath(dataManager);
         Logger.d(path);
+        boolean isDownloadNeedWifi = dataManager.isDownloadVideoNeedWifi();
         int id = DownloadManager.getImpl().startDownload(videoResult.getVideoUrl(), path, isDownloadNeedWifi, isForceReDownload);
         if (tmp.getAddDownloadDate() == null) {
             tmp.setAddDownloadDate(new Date());

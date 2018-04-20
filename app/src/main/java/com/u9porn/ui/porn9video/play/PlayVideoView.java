@@ -15,7 +15,7 @@ import java.util.List;
 public interface PlayVideoView extends BaseView {
     void showParsingDialog();
 
-    void playVideo(V9PornItem v9PornItem);
+    void parseVideoUrlSuccess(V9PornItem v9PornItem);
 
     void errorParseVideoUrl(String errorMessage);
 

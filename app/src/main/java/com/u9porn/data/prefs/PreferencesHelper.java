@@ -14,9 +14,9 @@ public interface PreferencesHelper {
 
     String getPorn9ForumAddress();
 
-    void setPaAddress(String address);
+    void setPavAddress(String address);
 
-    String getPaAddress();
+    String getPavAddress();
 
     void setPorn9VideoLoginUserName(String userName);
 
@@ -66,17 +66,17 @@ public interface PreferencesHelper {
 
     boolean isNeverAskForWatchDownloadTip();
 
-    void setIgnoreThisVersionUpdateTip(int versionCode);
+    void setIgnoreUpdateVersionCode(int versionCode);
 
-    int getIgnoreThisVersionUpdateTip();
+    int getIgnoreUpdateVersionCode();
 
     void setForbiddenAutoReleaseMemory(boolean autoReleaseMemory);
 
     boolean isForbiddenAutoReleaseMemory();
 
-    void setViewPorn9ForumContentShowTip(boolean contentShowTip);
+    void setNeedShowTipFirstViewForum9Content(boolean contentShowTip);
 
-    boolean isViewPorn9ForumContentShowTip();
+    boolean isNeedShowTipFirstViewForum9Content();
 
     void setNoticeVersionCode(int noticeVersionCode);
 

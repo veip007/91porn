@@ -49,7 +49,7 @@ public class SplashActivity extends MvpActivity<SplashView, SplashPresenter> imp
             return;
         }
 
-        if (UserHelper.isUserInfoComplete(user)) {
+        if (presenter.isUserLogin()) {
             startMain();
         }
         setContentView(R.layout.activity_splash);
@@ -86,7 +86,6 @@ public class SplashActivity extends MvpActivity<SplashView, SplashPresenter> imp
 
     @Override
     public void loginSuccess(User user) {
-        user.copyProperties(this.user);
         startMain();
     }
 

@@ -1,7 +1,8 @@
 package com.u9porn.ui.porn9forum.browse9forum;
 
-import com.u9porn.data.model.F9PornContent;
 import com.u9porn.ui.BaseView;
+
+import java.util.List;
 
 /**
  *
@@ -10,5 +11,5 @@ import com.u9porn.ui.BaseView;
  */
 
 public interface Browse9View extends BaseView{
-    void loadContentSuccess(F9PornContent f9PornContent);
+    void loadContentSuccess(String contentHtml, List<String> contentImageList,boolean isNightModel);
 }

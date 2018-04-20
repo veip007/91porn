@@ -78,12 +78,12 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     @Override
-    public void setPaAddress(String address) {
+    public void setPavAddress(String address) {
         mPrefs.edit().putString(KEY_SP_PIG_AV_ADDRESS, address).apply();
     }
 
     @Override
-    public String getPaAddress() {
+    public String getPavAddress() {
         return mPrefs.getString(KEY_SP_PIG_AV_ADDRESS, "");
     }
 
@@ -217,12 +217,12 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     @Override
-    public void setIgnoreThisVersionUpdateTip(int versionCode) {
+    public void setIgnoreUpdateVersionCode(int versionCode) {
         mPrefs.edit().putInt(KEY_SP_IGNORE_THIS_VERSION_UPDATE_TIP, versionCode).apply();
     }
 
     @Override
-    public int getIgnoreThisVersionUpdateTip() {
+    public int getIgnoreUpdateVersionCode() {
         return mPrefs.getInt(KEY_SP_IGNORE_THIS_VERSION_UPDATE_TIP, 0);
     }
 
@@ -237,12 +237,12 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     @Override
-    public void setViewPorn9ForumContentShowTip(boolean contentShowTip) {
+    public void setNeedShowTipFirstViewForum9Content(boolean contentShowTip) {
         mPrefs.edit().putBoolean(KEY_SP_VIEW_91_PORN_FORUM_CONTENT_SHOW_TIP, contentShowTip).apply();
     }
 
     @Override
-    public boolean isViewPorn9ForumContentShowTip() {
+    public boolean isNeedShowTipFirstViewForum9Content() {
         return mPrefs.getBoolean(KEY_SP_VIEW_91_PORN_FORUM_CONTENT_SHOW_TIP, true);
     }
 

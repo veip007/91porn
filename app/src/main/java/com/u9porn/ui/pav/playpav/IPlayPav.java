@@ -7,4 +7,6 @@ package com.u9porn.ui.pav.playpav;
 
 public interface IPlayPav {
     void parseVideoUrl(String url, String pId, boolean pullToRefresh);
+
+    String getVideoCacheProxyUrl(String originalVideoUrl);
 }

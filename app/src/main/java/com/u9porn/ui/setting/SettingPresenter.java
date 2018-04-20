@@ -7,13 +7,16 @@ import android.text.TextUtils;
 import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView;
 import com.trello.rxlifecycle2.LifecycleProvider;
+import com.u9porn.cookie.CookieManager;
 import com.u9porn.data.DataManager;
+import com.u9porn.data.model.User;
 import com.u9porn.data.network.Api;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RxSchedulersHelper;
 import com.u9porn.ui.MvpBasePresenter;
 import com.u9porn.ui.porn9video.search.SearchPresenter;
 import com.u9porn.utils.SDCardUtils;
+import com.u9porn.utils.UserHelper;
 
 import java.io.File;
 import java.util.concurrent.Callable;
@@ -38,11 +41,15 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> implements I
 
     private static final String TAG = SearchPresenter.class.getSimpleName();
     private DataManager dataManager;
+    private User user;
+    private CookieManager cookieManager;
 
     @Inject
-    public SettingPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
+    public SettingPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, User user, CookieManager cleanAllCookies) {
         super(provider);
         this.dataManager = dataManager;
+        this.user = user;
+        this.cookieManager = cleanAllCookies;
     }
 
     @Override
@@ -268,5 +275,81 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> implements I
                         });
                     }
                 });
+    }
+
+    @Override
+    public boolean isUserLogin() {
+        return UserHelper.isUserInfoComplete(user);
+    }
+
+    @Override
+    public void existLogin() {
+        cookieManager.cleanAllCookies();
+        user.cleanProperties();
+    }
+
+    @Override
+    public int getPlaybackEngine() {
+        return dataManager.getPlaybackEngine();
+    }
+
+    @Override
+    public void setPlaybackEngine(int playbackEngine) {
+        dataManager.setPlaybackEngine(playbackEngine);
+    }
+
+    @Override
+    public void setPorn9VideoAddress(String porn9VideoAddress) {
+        dataManager.setPorn9VideoAddress(porn9VideoAddress);
+    }
+
+    @Override
+    public void setPorn9ForumAddress(String porn9ForumAddress) {
+        dataManager.setPorn9ForumAddress(porn9ForumAddress);
+    }
+
+    @Override
+    public void setPavAddress(String pavAddress) {
+        dataManager.setPavAddress(pavAddress);
+    }
+
+    @Override
+    public void setCustomDownloadVideoDirPath(String newDirPath) {
+        dataManager.setCustomDownloadVideoDirPath(newDirPath);
+    }
+
+    @Override
+    public String getCustomDownloadVideoDirPath() {
+        return dataManager.getCustomDownloadVideoDirPath();
+    }
+
+    @Override
+    public boolean isForbiddenAutoReleaseMemory() {
+        return dataManager.isForbiddenAutoReleaseMemory();
+    }
+
+    @Override
+    public void setForbiddenAutoReleaseMemory(boolean forbiddenAutoReleaseMemory) {
+        dataManager.setForbiddenAutoReleaseMemory(forbiddenAutoReleaseMemory);
+    }
+
+    @Override
+    public boolean isDownloadVideoNeedWifi() {
+        return dataManager.isDownloadVideoNeedWifi();
+    }
+
+    @Override
+    public void setDownloadVideoNeedWifi(boolean downloadVideoNeedWifi) {
+        dataManager.setDownloadVideoNeedWifi(downloadVideoNeedWifi);
+    }
+
+    @Override
+    public boolean isOpenSkipPage() {
+        return dataManager.isOpenSkipPage();
+    }
+
+    @Override
+    public void setOpenSkipPage(boolean openSkipPage) {
+        dataManager.setOpenSkipPage(openSkipPage);
     }
 }

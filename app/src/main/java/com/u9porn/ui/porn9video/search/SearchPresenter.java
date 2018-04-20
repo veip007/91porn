@@ -114,4 +114,18 @@ public class SearchPresenter extends MvpBasePresenter<SearchView> implements ISe
                     }
                 });
     }
+
+    @Override
+    public int getPlayBackEngine() {
+        return dataManager.getPlaybackEngine();
+    }
+
+    @Override
+    public boolean isFirstInSearchPorn91Video() {
+        boolean isFirst = dataManager.isFirstInSearchPorn91Video();
+        if (isFirst) {
+            dataManager.setFirstInSearchPorn91Video(false);
+        }
+        return isFirst;
+    }
 }

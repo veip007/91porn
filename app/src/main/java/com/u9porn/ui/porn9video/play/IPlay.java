@@ -11,9 +11,25 @@ import com.u9porn.data.db.entity.V9PornItem;
 public interface IPlay extends IBasePlay {
     void loadVideoUrl(V9PornItem v9PornItem);
 
-    void loadVideoComment(String videoId, String viewKey,boolean pullToRefresh);
+    void loadVideoComment(String videoId, String viewKey, boolean pullToRefresh);
 
-    void commentVideo(String comment, String uid, String vid,String viewKey);
+    void commentVideo(String comment, String uid, String vid, String viewKey);
 
-    void replyComment(String comment, String username, String vid, String commentId,String viewKey);
+    void replyComment(String comment, String username, String vid, String commentId, String viewKey);
+
+    String getVideoCacheProxyUrl(String originalVideoUrl);
+
+    boolean isUserLogin();
+
+    int getLoginUserId();
+
+    void updateV9PornItemForHistory(V9PornItem v9PornItem);
+
+    V9PornItem findV9PornItemByViewKey(String viewKey);
+
+    boolean isNeverAskForWatchDownloadTip();
+
+    void setNeverAskForWatchDownloadTip(boolean neverAskForWatchDownloadTip);
+
+    void setFavoriteNeedRefresh(boolean favoriteNeedRefresh);
 }

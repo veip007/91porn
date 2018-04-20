@@ -10,5 +10,5 @@ import com.u9porn.ui.favorite.IBaseFavorite;
  */
 
 public interface IBaseDownload extends IBaseFavorite{
-    void downloadVideo(V9PornItem v9PornItem, boolean isDownloadNeedWifi, boolean isForceReDownload);
+    void downloadVideo(V9PornItem v9PornItem, boolean isForceReDownload);
 }

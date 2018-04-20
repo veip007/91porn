@@ -3,6 +3,7 @@ package com.u9porn.ui.pav.playpav;
 import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
 
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.model.PavVideoParserJsonResult;
@@ -24,10 +25,13 @@ public class PlayPavPresenter extends MvpBasePresenter<PlayPavView> implements I
 
     private DataManager dataManager;
 
+    private HttpProxyCacheServer httpProxyCacheServer;
+
     @Inject
-    public PlayPavPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
+    public PlayPavPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, HttpProxyCacheServer httpProxyCacheServer) {
         super(provider);
         this.dataManager = dataManager;
+        this.httpProxyCacheServer = httpProxyCacheServer;
     }
 
     @Override
@@ -70,5 +74,10 @@ public class PlayPavPresenter extends MvpBasePresenter<PlayPavView> implements I
                         });
                     }
                 });
+    }
+
+    @Override
+    public String getVideoCacheProxyUrl(final String originalVideoUrl) {
+        return dataManager.getVideoCacheProxyUrl(originalVideoUrl);
     }
 }

@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.u9porn.data.model.User;
 import com.u9porn.ui.user.UserPresenter;
+import com.u9porn.utils.UserHelper;
 
 import javax.inject.Inject;
 
@@ -16,10 +17,12 @@ import javax.inject.Inject;
 public class SplashPresenter extends MvpBasePresenter<SplashView> implements ISplash {
 
     private UserPresenter userPresenter;
+    private User user;
 
     @Inject
-    public SplashPresenter(UserPresenter userPresenter) {
+    public SplashPresenter(UserPresenter userPresenter, User user) {
         this.userPresenter = userPresenter;
+        this.user = user;
     }
 
     @Override
@@ -30,6 +33,7 @@ public class SplashPresenter extends MvpBasePresenter<SplashView> implements ISp
                 ifViewAttached(new ViewAction<SplashView>() {
                     @Override
                     public void run(@NonNull SplashView view) {
+                        user.copyProperties(SplashPresenter.this.user);
                         view.loginSuccess(user);
                     }
                 });
@@ -45,5 +49,10 @@ public class SplashPresenter extends MvpBasePresenter<SplashView> implements ISp
                 });
             }
         });
+    }
+
+    @Override
+    public boolean isUserLogin() {
+        return UserHelper.isUserInfoComplete(user);
     }
 }

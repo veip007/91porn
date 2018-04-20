@@ -79,8 +79,8 @@ public class ProxySettingActivity extends MvpActivity<ProxyView, ProxyPresenter>
 
     private void init() {
         testAlertDialog = DialogUtils.initLoadingDialog(this, "测试中，请稍候...");
-        String proxyHost = dataManager.getProxyIpAddress();
-        int port = dataManager.getProxyPort();
+        String proxyHost = presenter.getProxyIpAddress();
+        int port = presenter.getProxyPort();
         etDialogProxySettingIpAddress.setIpAddressStr(proxyHost);
         etDialogProxySettingPort.setText(port == 0 ? "" : String.valueOf(port));
 
@@ -178,9 +178,9 @@ public class ProxySettingActivity extends MvpActivity<ProxyView, ProxyPresenter>
         String proxyIpAddress = etDialogProxySettingIpAddress.getIpAddressStr();
         int proxyPort = Integer.parseInt(etDialogProxySettingPort.getText().toString());
         //设置开启代理并存储地址和端口号
-        dataManager.setOpenHttpProxy(true);
-        dataManager.setProxyIpAddress(proxyIpAddress);
-        dataManager.setProxyPort(proxyPort);
+        presenter.setOpenHttpProxy(true);
+        presenter.setProxyIpAddress(proxyIpAddress);
+        presenter.setProxyPort(proxyPort);
         showMessage("设置成功", TastyToast.SUCCESS);
         onBackPressed();
     }

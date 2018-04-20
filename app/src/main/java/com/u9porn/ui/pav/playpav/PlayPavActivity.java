@@ -162,7 +162,7 @@ public class PlayPavActivity extends MvpActivity<PlayPavView, PlayPavPresenter> 
             showMessage("播放地址无效", TastyToast.ERROR);
             return;
         }
-        String proxyUrl = httpProxyCacheServer.getProxyUrl(url);
+        String proxyUrl = presenter.getVideoCacheProxyUrl(url);
         videoPlayer.setVideoURI(Uri.parse(proxyUrl));
     }
 

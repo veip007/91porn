@@ -23,7 +23,6 @@ import io.reactivex.schedulers.Schedulers;
 @PerActivity
 public class UpdatePresenter extends MvpBasePresenter<UpdateView> implements IUpdate {
 
-    private final static String CHECK_UPDATE_URL = "https://github.com/techGay/91porn/blob/master/version.txt";
     private LifecycleProvider<Lifecycle.Event> provider;
 
     private DataManager dataManager;
@@ -40,7 +39,7 @@ public class UpdatePresenter extends MvpBasePresenter<UpdateView> implements IUp
     }
 
     public void checkUpdate(final int versionCode, final UpdateListener updateListener) {
-        dataManager.checkUpdate(CHECK_UPDATE_URL)
+        dataManager.checkUpdate()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(provider.<UpdateVersion>bindUntilEvent(Lifecycle.Event.ON_DESTROY))

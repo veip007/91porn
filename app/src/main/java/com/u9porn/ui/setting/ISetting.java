@@ -20,4 +20,34 @@ public interface ISetting {
     boolean isHaveFinishDownloadVideoFile();
 
     void moveOldDownloadVideoToNewDir(String newDirPath, QMUICommonListItemView qmuiCommonListItemView);
+
+    boolean isUserLogin();
+
+    void existLogin();
+
+    int getPlaybackEngine();
+
+    void setPlaybackEngine(int playbackEngine);
+
+    void setPorn9VideoAddress(String porn9VideoAddress);
+
+    void setPorn9ForumAddress(String porn9ForumAddress);
+
+    void setPavAddress(String pavAddress);
+
+    void setCustomDownloadVideoDirPath(String newDirPath);
+
+    String getCustomDownloadVideoDirPath();
+
+    boolean isForbiddenAutoReleaseMemory();
+
+    void setForbiddenAutoReleaseMemory(boolean forbiddenAutoReleaseMemory);
+
+    boolean isDownloadVideoNeedWifi();
+
+    void setDownloadVideoNeedWifi(boolean downloadVideoNeedWifi);
+
+    boolean isOpenSkipPage();
+
+    void setOpenSkipPage(boolean openSkipPage);
 }

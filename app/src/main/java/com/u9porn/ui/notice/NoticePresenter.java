@@ -20,7 +20,6 @@ import javax.inject.Inject;
 @PerActivity
 public class NoticePresenter extends MvpBasePresenter<NoticeView> implements INotice {
 
-    private final static String CHECK_NEW_NOTICE_URL = "https://github.com/techGay/91porn/blob/master/notice.txt";
     private LifecycleProvider<Lifecycle.Event> provider;
 
     private DataManager dataManager;
@@ -32,12 +31,13 @@ public class NoticePresenter extends MvpBasePresenter<NoticeView> implements INo
     }
 
     @Override
-    public void checkNewNotice(int versionCode) {
-        checkNewNotice(versionCode, null);
+    public void checkNewNotice() {
+        checkNewNotice(null);
     }
 
-    public void checkNewNotice(final int versionCode, final CheckNewNoticeListener checkNewNoticeListener) {
-        dataManager.checkNewNotice(CHECK_NEW_NOTICE_URL)
+    public void checkNewNotice(final CheckNewNoticeListener checkNewNoticeListener) {
+        final int versionCode = dataManager.getNoticeVersionCode();
+        dataManager.checkNewNotice()
                 .compose(RxSchedulersHelper.<Notice>ioMainThread())
                 .compose(provider.<Notice>bindUntilEvent(Lifecycle.Event.ON_DESTROY))
                 .subscribe(new CallBackWrapper<Notice>() {

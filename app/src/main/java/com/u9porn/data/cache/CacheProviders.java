@@ -44,7 +44,7 @@ public interface CacheProviders {
      * @param evictViewKey  缓存控制
      * @return oab对象
      */
-    @ProviderKey("playVideo")
+    @ProviderKey("parseVideoUrlSuccess")
     Observable<Reply<String>> getVideoPlayPage(Observable<String> playVideoPage, DynamicKey viewKey, EvictDynamicKey evictViewKey);
 
     /**

@@ -1,6 +1,5 @@
 package com.u9porn.ui;
 
-import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,24 +12,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.jaeger.library.StatusBarUtil;
 import com.orhanobut.logger.Logger;
 import com.sdsmdg.tastytoast.TastyToast;
-import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
-import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.MyApplication;
 import com.u9porn.R;
-import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.V9PornItem;
-import com.u9porn.data.model.User;
 import com.u9porn.di.component.ActivityComponent;
 import com.u9porn.di.component.DaggerActivityComponent;
 import com.u9porn.di.module.ActivityModule;
 import com.u9porn.utils.PlaybackEngine;
 import com.u9porn.utils.constants.Keys;
-
-import javax.inject.Inject;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
@@ -43,21 +35,10 @@ import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 public abstract class BaseAppCompatActivity extends AppCompatActivity implements BGASwipeBackHelper.Delegate {
     private final String TAG = this.getClass().getSimpleName();
 
-    protected final LifecycleProvider<Lifecycle.Event> provider = AndroidLifecycle.createLifecycleProvider(this);
-
     protected BGASwipeBackHelper mSwipeBackHelper;
     protected boolean existActivityWithAnimation = true;
     protected Context context;
     private ActivityComponent mActivityComponent;
-
-    @Inject
-    protected HttpProxyCacheServer httpProxyCacheServer;
-
-    @Inject
-    protected User user;
-
-    @Inject
-    protected DataManager dataManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,7 +96,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     /**
      * 是否支持滑动返回。这里在父类中默认返回 true 来支持滑动返回，如果某个界面不想支持滑动返回则重写该方法返回 false 即可
      *
-     * @return
+     * @return zhichi
      */
     @Override
     public boolean isSupportSwipeBack() {
@@ -167,8 +148,8 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
         overridePendingTransition(R.anim.slide_in_right, R.anim.side_out_left);
     }
 
-    protected void goToPlayVideo(V9PornItem v9PornItem) {
-        Intent intent = PlaybackEngine.getPlaybackEngineIntent(this, dataManager.getPlaybackEngine());
+    protected void goToPlayVideo(V9PornItem v9PornItem, int playBackEngine) {
+        Intent intent = PlaybackEngine.getPlaybackEngineIntent(this, playBackEngine);
         intent.putExtra(Keys.KEY_INTENT_V9PORN_ITEM, v9PornItem);
         startActivityWithAnimotion(intent);
     }
@@ -189,7 +170,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     /**
      * 设置状态栏颜色
      *
-     * @param color
+     * @param color color
      */
     protected void setStatusBarColor(@ColorInt int color) {
         setStatusBarColor(color, StatusBarUtil.DEFAULT_STATUS_BAR_ALPHA);
@@ -198,7 +179,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     /**
      * 设置状态栏颜色
      *
-     * @param color
+     * @param color color
      * @param statusBarAlpha 透明度
      */
     public void setStatusBarColor(@ColorInt int color, @IntRange(from = 0, to = 255) int statusBarAlpha) {
@@ -229,11 +210,5 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
             }
         });
         toolbar.setContentInsetStartWithNavigation(0);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Logger.t(TAG).d("------------------onStop()");
     }
 }

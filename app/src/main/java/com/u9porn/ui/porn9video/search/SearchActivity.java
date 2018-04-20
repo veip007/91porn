@@ -65,9 +65,8 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
         ButterKnife.bind(this);
         init();
         setListener();
-        boolean isFirst = dataManager.isFirstInSearchPorn91Video();
+        boolean isFirst = presenter.isFirstInSearchPorn91Video();
         if (isFirst) {
-            dataManager.setFirstInSearchPorn91Video(false);
             showTipDialog();
         }
     }
@@ -92,7 +91,7 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 V9PornItem v9PornItems = (V9PornItem) adapter.getData().get(position);
-                goToPlayVideo(v9PornItems);
+                goToPlayVideo(v9PornItems, presenter.getPlayBackEngine());
             }
         });
         mV91PornAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {

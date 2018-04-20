@@ -1,5 +1,6 @@
 package com.u9porn.data;
 
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.u9porn.data.db.DbHelper;
 import com.u9porn.data.model.BaseResult;
 import com.u9porn.data.db.entity.Category;
@@ -40,11 +41,14 @@ public class AppDataManager implements DataManager {
     private final PreferencesHelper mPreferencesHelper;
     private final ApiHelper mApiHelper;
 
+    private final HttpProxyCacheServer httpProxyCacheServer;
+
     @Inject
-    AppDataManager(DbHelper mDbHelper, PreferencesHelper mPreferencesHelper, ApiHelper mApiHelper) {
+    AppDataManager(DbHelper mDbHelper, PreferencesHelper mPreferencesHelper, ApiHelper mApiHelper, HttpProxyCacheServer httpProxyCacheServer) {
         this.mDbHelper = mDbHelper;
         this.mPreferencesHelper = mPreferencesHelper;
         this.mApiHelper = mApiHelper;
+        this.httpProxyCacheServer = httpProxyCacheServer;
     }
 
     @Override
@@ -208,13 +212,13 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Observable<UpdateVersion> checkUpdate(String url) {
-        return mApiHelper.checkUpdate(url);
+    public Observable<UpdateVersion> checkUpdate() {
+        return mApiHelper.checkUpdate();
     }
 
     @Override
-    public Observable<Notice> checkNewNotice(String url) {
-        return mApiHelper.checkNewNotice(url);
+    public Observable<Notice> checkNewNotice() {
+        return mApiHelper.checkNewNotice();
     }
 
     @Override
@@ -283,13 +287,13 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public void setPaAddress(String address) {
-        mPreferencesHelper.setPaAddress(address);
+    public void setPavAddress(String address) {
+        mPreferencesHelper.setPavAddress(address);
     }
 
     @Override
-    public String getPaAddress() {
-        return mPreferencesHelper.getPaAddress();
+    public String getPavAddress() {
+        return mPreferencesHelper.getPavAddress();
     }
 
     @Override
@@ -413,13 +417,13 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public void setIgnoreThisVersionUpdateTip(int versionCode) {
-        mPreferencesHelper.setIgnoreThisVersionUpdateTip(versionCode);
+    public void setIgnoreUpdateVersionCode(int versionCode) {
+        mPreferencesHelper.setIgnoreUpdateVersionCode(versionCode);
     }
 
     @Override
-    public int getIgnoreThisVersionUpdateTip() {
-        return mPreferencesHelper.getIgnoreThisVersionUpdateTip();
+    public int getIgnoreUpdateVersionCode() {
+        return mPreferencesHelper.getIgnoreUpdateVersionCode();
     }
 
     @Override
@@ -433,13 +437,13 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public void setViewPorn9ForumContentShowTip(boolean contentShowTip) {
-        mPreferencesHelper.setViewPorn9ForumContentShowTip(contentShowTip);
+    public void setNeedShowTipFirstViewForum9Content(boolean contentShowTip) {
+        mPreferencesHelper.setNeedShowTipFirstViewForum9Content(contentShowTip);
     }
 
     @Override
-    public boolean isViewPorn9ForumContentShowTip() {
-        return mPreferencesHelper.isViewPorn9ForumContentShowTip();
+    public boolean isNeedShowTipFirstViewForum9Content() {
+        return mPreferencesHelper.isNeedShowTipFirstViewForum9Content();
     }
 
     @Override
@@ -520,5 +524,10 @@ public class AppDataManager implements DataManager {
     @Override
     public Observable<Boolean> testPavAddress(String url) {
         return mApiHelper.testPavAddress(url);
+    }
+
+    @Override
+    public String getVideoCacheProxyUrl(String originalVideoUrl) {
+        return httpProxyCacheServer.getProxyUrl(originalVideoUrl, true);
     }
 }

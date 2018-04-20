@@ -20,7 +20,6 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
-import com.u9porn.data.model.F9PornContent;
 import com.u9porn.data.model.F9PronItem;
 import com.u9porn.data.model.HostJsScope;
 import com.u9porn.ui.MvpActivity;
@@ -31,6 +30,7 @@ import com.u9porn.utils.StringUtils;
 import com.u9porn.utils.constants.Keys;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import javax.inject.Inject;
@@ -54,9 +54,6 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
     private F9PronItem f9PronItem;
     private ArrayList<String> imageList;
     private Stack<Long> historyIdStack;
-
-    boolean isNightModel;
-
     @Inject
     protected Browse9Presenter browse9Presenter;
 
@@ -66,7 +63,6 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse9_porn);
         ButterKnife.bind(this);
-        isNightModel = dataManager.isOpenNightMode();
         historyIdStack = new Stack<>();
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -86,7 +82,7 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
                     String tidStr = StringUtils.subString(url, starIndex + 4, starIndex + 10);
                     if (!TextUtils.isEmpty(tidStr) && TextUtils.isDigitsOnly(tidStr)) {
                         Long id = Long.parseLong(tidStr);
-                        presenter.loadContent(id, isNightModel);
+                        presenter.loadContent(id);
                         historyIdStack.push(id);
                     } else {
                         Logger.t(TAG).d(tidStr);
@@ -98,10 +94,10 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
         });
         AppUtils.setColorSchemeColors(context, swipeLayout);
         f9PronItem = (F9PronItem) getIntent().getSerializableExtra(Keys.KEY_INTENT_BROWSE_FORUM_9PORN_ITEM);
-        presenter.loadContent(f9PronItem.getTid(), isNightModel);
+        presenter.loadContent(f9PronItem.getTid());
         historyIdStack.push(f9PronItem.getTid());
         imageList = new ArrayList<>();
-        boolean needShowTip = dataManager.isViewPorn9ForumContentShowTip();
+        boolean needShowTip = presenter.isNeedShowTipFirstViewForum9Content();
         if (needShowTip) {
             showTipDialog();
         }
@@ -125,7 +121,7 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
                 String tidStr = builder.getEditText().getText().toString().trim();
                 if (!TextUtils.isEmpty(tidStr) && TextUtils.isDigitsOnly(tidStr) && tidStr.length() <= 6) {
                     Long id = Long.parseLong(tidStr);
-                    presenter.loadContent(id, isNightModel);
+                    presenter.loadContent(id);
                     historyIdStack.push(id);
                     dialog.dismiss();
                 } else {
@@ -152,7 +148,7 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
         builder.addAction("我知道了", new QMUIDialogAction.ActionListener() {
             @Override
             public void onClick(QMUIDialog dialog, int index) {
-                dataManager.setViewPorn9ForumContentShowTip(false);
+                presenter.setNeedShowTipFirstViewForum9Content(false);
                 dialog.dismiss();
             }
         });
@@ -211,11 +207,12 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
     }
 
     @Override
-    public void loadContentSuccess(F9PornContent f9PornContent) {
+    public void loadContentSuccess(String contentHtml, List<String> contentImageList, boolean isNightModel) {
         imageList.clear();
-        imageList.addAll(f9PornContent.getImageList());
+        imageList.addAll(contentImageList);
         //mWebView.loadUrl("about:blank");;
-        String html = AppUtils.buildHtml(AppUtils.buildTitle(f9PronItem.getTitle(), f9PronItem.getAuthor(), f9PronItem.getAuthorPublishTime()) + f9PornContent.getContent(), isNightModel);
+        String html = AppUtils.buildHtml(AppUtils.buildTitle(f9PronItem.getTitle(), f9PronItem.getAuthor(), f9PronItem.getAuthorPublishTime()) + contentHtml, isNightModel);
+
         mWebView.loadDataWithBaseURL("", html, "text/html", "utf-8", null);
         //mWebView.loadData(StringEscapeUtils.escapeHtml4(f9PornContent.getContent()), "text/html", "UTF-8");
         mWebView.setVisibility(View.VISIBLE);
@@ -223,7 +220,7 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
 
     @Override
     public void onRefresh() {
-        presenter.loadContent(f9PronItem.getTid(), isNightModel);
+        presenter.loadContent(f9PronItem.getTid());
     }
 
     @Override
@@ -256,7 +253,7 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
             historyIdStack.pop();
         }
         if (!historyIdStack.empty()) {
-            presenter.loadContent(historyIdStack.peek(), isNightModel);
+            presenter.loadContent(historyIdStack.peek());
             return;
         }
         super.onBackPressed();

@@ -36,7 +36,6 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
 import com.u9porn.adapter.VideoCommentAdapter;
-import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.data.db.entity.VideoResult;
 import com.u9porn.data.model.VideoComment;
@@ -48,7 +47,6 @@ import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.AppUtils;
 import com.u9porn.utils.DialogUtils;
 import com.u9porn.utils.LoadHelperUtils;
-import com.u9porn.utils.UserHelper;
 import com.u9porn.utils.constants.Keys;
 
 import java.util.ArrayList;
@@ -113,13 +111,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     private VideoComment videoComment;
 
     @Inject
-    protected AddressHelper addressHelper;
-
-    @Inject
     protected PlayVideoPresenter playVideoPresenter;
-
-    @Inject
-    protected DataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,7 +178,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
             return;
         }
 
-        if (!UserHelper.isUserInfoComplete(user)) {
+        if (!presenter.isUserLogin()) {
             showMessage("请先登录帐号", TastyToast.INFO);
             goToLogin();
             return;
@@ -196,7 +188,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
             return;
         }
         String vid = v9PornItem.getVideoResult().getVideoId();
-        String uid = String.valueOf(user.getUserId());
+        String uid = String.valueOf(presenter.getLoginUserId());
         if (isComment) {
             commentVideoDialog.show();
             presenter.commentVideo(comment, uid, vid, v9PornItem.getViewKey());
@@ -213,7 +205,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     }
 
     private void initData() {
-        V9PornItem tmp = dataManager.findV9PornItemByViewKey(v9PornItem.getViewKey());
+        V9PornItem tmp = presenter.findV9PornItemByViewKey(v9PornItem.getViewKey());
         if (tmp == null || tmp.getVideoResult() == null) {
             presenter.loadVideoUrl(v9PornItem);
         } else {
@@ -222,10 +214,10 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
             Logger.t(TAG).d("使用已有播放地址");
             //浏览历史
             v9PornItem.setViewHistoryDate(new Date());
-            dataManager.updateV9PornItem(v9PornItem);
+            presenter.updateV9PornItemForHistory(v9PornItem);
             VideoResult videoResult = v9PornItem.getVideoResult();
             setToolBarLayoutInfo(v9PornItem);
-            playVideo(v9PornItem.getTitle(), videoResult.getVideoUrl(), videoResult.getVideoName(), videoResult.getThumbImgUrl());
+            playVideo(v9PornItem.getTitle(), presenter.getVideoCacheProxyUrl(videoResult.getVideoUrl()), videoResult.getVideoName(), videoResult.getThumbImgUrl());
             //加载评论
             presenter.loadVideoComment(videoResult.getVideoId(), v9PornItem.getViewKey(), true);
         }
@@ -248,7 +240,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
         tvPlayVideoAuthor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!UserHelper.isUserInfoComplete(user)) {
+                if (!presenter.isUserLogin()) {
                     goToLogin();
                     showMessage("请先登录", TastyToast.INFO);
                     return;
@@ -366,15 +358,16 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     }
 
     @Override
-    public void playVideo(V9PornItem v9PornItem) {
+    public void parseVideoUrlSuccess(V9PornItem v9PornItem) {
         this.v9PornItem = v9PornItem;
         videoPlayerContainer.setVisibility(View.VISIBLE);
         setToolBarLayoutInfo(v9PornItem);
         VideoResult videoResult = v9PornItem.getVideoResult();
-        playVideo(v9PornItem.getTitle(), videoResult.getVideoUrl(), "", videoResult.getThumbImgUrl());
+        //开始播放
+        playVideo(v9PornItem.getTitle(), presenter.getVideoCacheProxyUrl(videoResult.getVideoUrl()), "", videoResult.getThumbImgUrl());
         helper.showContent();
         presenter.loadVideoComment(videoResult.getVideoId(), v9PornItem.getViewKey(), true);
-        boolean neverAskForWatchDownloadTip = dataManager.isNeverAskForWatchDownloadTip();
+        boolean neverAskForWatchDownloadTip = presenter.isNeverAskForWatchDownloadTip();
         if (!neverAskForWatchDownloadTip) {
             showWatchDownloadVideoTipDialog();
         }
@@ -394,11 +387,11 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
                 dialog.dismiss();
             }
         });
-        builder.setLeftAction("不再提示", new QMUIDialogAction.ActionListener() {
+        builder.addAction("不再提示", new QMUIDialogAction.ActionListener() {
             @Override
             public void onClick(QMUIDialog dialog, int index) {
                 dialog.dismiss();
-                dataManager.setNeverAskForWatchDownloadTip(true);
+                presenter.setNeverAskForWatchDownloadTip(true);
             }
         });
         builder.show();
@@ -415,7 +408,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
 
     @Override
     public void favoriteSuccess() {
-        dataManager.setFavoriteNeedRefresh(true);
+        presenter.setFavoriteNeedRefresh(true);
         showMessage("收藏成功", TastyToast.SUCCESS);
     }
 
@@ -574,8 +567,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
     }
 
     private void startDownloadVideo() {
-        boolean isDownloadNeedWifi = dataManager.isDownloadVideoNeedWifi();
-        presenter.downloadVideo(v9PornItem, isDownloadNeedWifi, false);
+        presenter.downloadVideo(v9PornItem, false);
         Intent intent = new Intent(this, DownloadVideoService.class);
         startService(intent);
     }
@@ -586,17 +578,17 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
             return;
         }
         VideoResult videoResult = v9PornItem.getVideoResult();
-        if (!UserHelper.isUserInfoComplete(user)) {
+        if (!presenter.isUserLogin()) {
             goToLogin();
             showMessage("请先登录", TastyToast.SUCCESS);
             return;
         }
-        if (Integer.parseInt(videoResult.getAuthorId()) == user.getUserId()) {
+        if (Integer.parseInt(videoResult.getAuthorId()) == presenter.getLoginUserId()) {
             showMessage("不能收藏自己的视频", TastyToast.WARNING);
             return;
         }
         favoriteDialog.show();
-        presenter.favorite(String.valueOf(user.getUserId()), videoResult.getVideoId(), videoResult.getAuthorId());
+        presenter.favorite(String.valueOf(presenter.getLoginUserId()), videoResult.getVideoId(), videoResult.getAuthorId());
     }
 
     private void shareVideoUrl() {

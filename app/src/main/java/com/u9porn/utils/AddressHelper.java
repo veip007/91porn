@@ -42,6 +42,6 @@ public class AddressHelper {
     }
 
     public String getPavAddress() {
-        return preferencesHelper.getPaAddress();
+        return preferencesHelper.getPavAddress();
     }
 }

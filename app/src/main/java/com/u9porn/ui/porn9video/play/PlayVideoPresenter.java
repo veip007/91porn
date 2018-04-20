@@ -13,6 +13,7 @@ import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.cookie.CookieManager;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.V9PornItem;
+import com.u9porn.data.model.User;
 import com.u9porn.data.model.VideoComment;
 import com.u9porn.data.db.entity.VideoResult;
 import com.u9porn.di.PerActivity;
@@ -22,6 +23,7 @@ import com.u9porn.rxjava.RetryWhenProcess;
 import com.u9porn.rxjava.RxSchedulersHelper;
 import com.u9porn.ui.download.DownloadPresenter;
 import com.u9porn.ui.favorite.FavoritePresenter;
+import com.u9porn.utils.UserHelper;
 
 import java.util.Date;
 import java.util.List;
@@ -45,19 +47,21 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
     private DownloadPresenter downloadPresenter;
 
     private LifecycleProvider<Lifecycle.Event> provider;
-    private final static int COMMENT_PER_PAGE_NUM = 20;
+
     private int start = 1;
     private DataManager dataManager;
 
     private CookieManager cookieManager;
+    private User user;
 
     @Inject
-    public PlayVideoPresenter(FavoritePresenter favoritePresenter, DownloadPresenter downloadPresenter, LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, CookieManager cookieManager) {
+    public PlayVideoPresenter(FavoritePresenter favoritePresenter, DownloadPresenter downloadPresenter, LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, CookieManager cookieManager, User user) {
         this.favoritePresenter = favoritePresenter;
         this.downloadPresenter = downloadPresenter;
         this.provider = provider;
         this.dataManager = dataManager;
         this.cookieManager = cookieManager;
+        this.user = user;
     }
 
     @Override
@@ -100,7 +104,7 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
                         ifViewAttached(new ViewAction<PlayVideoView>() {
                             @Override
                             public void run(@NonNull PlayVideoView view) {
-                                view.playVideo(saveVideoUrl(videoResult, v9PornItem));
+                                view.parseVideoUrlSuccess(saveVideoUrl(videoResult, v9PornItem));
                             }
                         });
                     }
@@ -268,6 +272,46 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
         ;
     }
 
+    @Override
+    public String getVideoCacheProxyUrl(String originalVideoUrl) {
+        return dataManager.getVideoCacheProxyUrl(originalVideoUrl);
+    }
+
+    @Override
+    public boolean isUserLogin() {
+        return UserHelper.isUserInfoComplete(user);
+    }
+
+    @Override
+    public int getLoginUserId() {
+        return user.getUserId();
+    }
+
+    @Override
+    public void updateV9PornItemForHistory(V9PornItem v9PornItem) {
+        dataManager.updateV9PornItem(v9PornItem);
+    }
+
+    @Override
+    public V9PornItem findV9PornItemByViewKey(String viewKey) {
+        return dataManager.findV9PornItemByViewKey(viewKey);
+    }
+
+    @Override
+    public boolean isNeverAskForWatchDownloadTip() {
+        return dataManager.isNeverAskForWatchDownloadTip();
+    }
+
+    @Override
+    public void setNeverAskForWatchDownloadTip(boolean neverAskForWatchDownloadTip) {
+        dataManager.setNeverAskForWatchDownloadTip(neverAskForWatchDownloadTip);
+    }
+
+    @Override
+    public void setFavoriteNeedRefresh(boolean favoriteNeedRefresh) {
+        dataManager.setFavoriteNeedRefresh(favoriteNeedRefresh);
+    }
+
     private V9PornItem saveVideoUrl(VideoResult videoResult, V9PornItem v9PornItem) {
         dataManager.saveVideoResult(videoResult);
         v9PornItem.setVideoResult(videoResult);
@@ -277,8 +321,9 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
     }
 
     @Override
-    public void downloadVideo(V9PornItem v9PornItem, boolean isDownloadNeedWifi, boolean isForceReDownload) {
-        downloadPresenter.downloadVideo(v9PornItem, isDownloadNeedWifi, isForceReDownload, new DownloadPresenter.DownloadListener() {
+    public void downloadVideo(V9PornItem v9PornItem, boolean isForceReDownload) {
+
+        downloadPresenter.downloadVideo(v9PornItem, isForceReDownload, new DownloadPresenter.DownloadListener() {
             @Override
             public void onSuccess(final String message) {
                 ifViewAttached(new ViewAction<PlayVideoView>() {

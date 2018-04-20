@@ -25,11 +25,13 @@ public class UserPresenter extends MvpBasePresenter<UserView> implements IUser {
 
     private LifecycleProvider<Lifecycle.Event> provider;
     private DataManager dataManager;
+    private User user;
 
     @Inject
-    public UserPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
+    public UserPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, User user) {
         this.provider = provider;
         this.dataManager = dataManager;
+        this.user = user;
     }
 
     @Override
@@ -56,6 +58,7 @@ public class UserPresenter extends MvpBasePresenter<UserView> implements IUser {
 
                     @Override
                     public void onSuccess(final User user) {
+                        user.copyProperties(UserPresenter.this.user);
                         if (loginListener != null) {
                             loginListener.loginSuccess(user);
                         } else {
@@ -108,6 +111,7 @@ public class UserPresenter extends MvpBasePresenter<UserView> implements IUser {
                         ifViewAttached(new ViewAction<UserView>() {
                             @Override
                             public void run(@NonNull UserView view) {
+                                user.copyProperties(UserPresenter.this.user);
                                 view.showContent();
                                 view.registerSuccess(user);
                             }

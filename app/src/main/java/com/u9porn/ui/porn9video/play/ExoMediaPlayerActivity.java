@@ -55,19 +55,7 @@ public class ExoMediaPlayerActivity extends BasePlayVideo implements OnPreparedL
         if (!TextUtils.isEmpty(thumImgUrl)) {
             GlideApp.with(this).load(Uri.parse(thumImgUrl)).transition(new DrawableTransitionOptions().crossFade(300)).into(videoPlayer.getPreviewImageView());
         }
-        //加载本地下载好的视频
-        if (v9PornItem.getStatus() == FileDownloadStatus.completed) {
-            File downloadFile = new File(v9PornItem.getDownLoadPath(dataManager));
-            if (downloadFile.exists()) {
-                videoPlayer.setVideoPath(downloadFile.getAbsolutePath());
-            } else {
-                String proxyUrl = httpProxyCacheServer.getProxyUrl(videoUrl);
-                videoPlayer.setVideoURI(Uri.parse(proxyUrl));
-            }
-        } else {
-            String proxyUrl = httpProxyCacheServer.getProxyUrl(videoUrl);
-            videoPlayer.setVideoURI(Uri.parse(proxyUrl));
-        }
+        videoPlayer.setVideoURI(Uri.parse(videoUrl));
         videoControlsMobile.setTitle(title);
     }
 

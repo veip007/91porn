@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -75,7 +74,7 @@ import butterknife.ButterKnife;
  */
 public class MainActivity extends MvpActivity<MainView, MainPresenter> implements MainView {
     public final static int PORN9 = 2;
-    final int PA = 3;
+    final int PAV = 3;
     final int MEI_ZI_TU = 0;
     final int MM_99 = 1;
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -130,8 +129,8 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
             }
         });
-        firstTabShow = dataManager.getMainFirstTabShow();
-        secondTabShow = dataManager.getMainSecondTabShow();
+        firstTabShow = presenter.getMainFirstTabShow();
+        secondTabShow = presenter.getMainSecondTabShow();
         doOnTabSelected(selectIndex);
     }
 
@@ -265,7 +264,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 showFloatingActionButton(fabSearch);
                 break;
             case 2:
-                if (TextUtils.isEmpty(dataManager.getPorn9ForumAddress())) {
+                if (presenter.haveNotSetF9pornAddress()) {
                     showNeedSetAddressDialog();
                     return;
                 }
@@ -297,7 +296,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     private void handlerFirstTabClickToShow(int position, int itemId, boolean isInnerReplace) {
         switch (position) {
             case PORN9:
-                if (TextUtils.isEmpty(dataManager.getPorn9VideoAddress())) {
+                if (presenter.haveNotSetV9pronAddress()) {
                     showNeedSetAddressDialog();
                     return;
                 }
@@ -306,11 +305,11 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 }
                 mCurrentFragment = FragmentUtils.switchContent(fragmentManager, mCurrentFragment, mMain9PronVideoFragment, contentFrameLayout.getId(), itemId, isInnerReplace);
                 firstTabShow = PORN9;
-                dataManager.setMainFirstTabShow(PORN9);
+                presenter.setMainFirstTabShow(PORN9);
                 mMainPavFragment = null;
                 break;
-            case PA:
-                if (TextUtils.isEmpty(dataManager.getPaAddress())) {
+            case PAV:
+                if (presenter.haveNotSetPavAddress()) {
                     showNeedSetAddressDialog();
                     return;
                 }
@@ -318,8 +317,8 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                     mMainPavFragment = MainPavFragment.getInstance();
                 }
                 mCurrentFragment = FragmentUtils.switchContent(fragmentManager, mCurrentFragment, mMainPavFragment, contentFrameLayout.getId(), itemId, isInnerReplace);
-                firstTabShow = PA;
-                dataManager.setMainFirstTabShow(PA);
+                firstTabShow = PAV;
+                presenter.setMainFirstTabShow(PAV);
                 mMain9PronVideoFragment = null;
                 break;
             default:
@@ -355,7 +354,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 }
                 mCurrentFragment = FragmentUtils.switchContent(fragmentManager, mCurrentFragment, mMaiMeiZiTuFragment, contentFrameLayout.getId(), itemId, isInnerReplace);
                 secondTabShow = MEI_ZI_TU;
-                dataManager.setMainSecondTabShow(MEI_ZI_TU);
+                presenter.setMainSecondTabShow(MEI_ZI_TU);
                 mMain99MmFragment = null;
                 break;
             case MM_99:
@@ -364,7 +363,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 }
                 mCurrentFragment = FragmentUtils.switchContent(fragmentManager, mCurrentFragment, mMain99MmFragment, contentFrameLayout.getId(), itemId, isInnerReplace);
                 secondTabShow = MM_99;
-                dataManager.setMainSecondTabShow(MM_99);
+                presenter.setMainSecondTabShow(MM_99);
                 mMaiMeiZiTuFragment = null;
                 break;
             case 2:
@@ -472,8 +471,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     }
 
     private void checkNewNotice() {
-        int versionCode = dataManager.getNoticeVersionCode();
-        presenter.checkNewNotice(versionCode);
+        presenter.checkNewNotice();
     }
 
     @Override
@@ -521,7 +519,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     private void goToSearchVideo() {
 
-        if (!UserHelper.isUserInfoComplete(user)) {
+        if (!presenter.isUserLogin()) {
             showMessage("请先登录", TastyToast.INFO);
             Intent intent = new Intent(MainActivity.this, UserLoginActivity.class);
             intent.putExtra(Keys.KEY_INTENT_LOGIN_FOR_ACTION, UserLoginActivity.LOGIN_ACTION_FOR_SEARCH_91PRON_VIDEO);
@@ -552,11 +550,11 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 dialog.dismiss();
             }
         });
-        builder.setLeftAction("该版本不再提示", new QMUIDialogAction.ActionListener() {
+        builder.addAction("该版本不再提示", new QMUIDialogAction.ActionListener() {
             @Override
             public void onClick(QMUIDialog dialog, int index) {
                 //保存版本号，用户对于此版本选择了不在提示
-                dataManager.setIgnoreThisVersionUpdateTip(updateVersion.getVersionCode());
+                presenter.setIgnoreUpdateVersionCode(updateVersion.getVersionCode());
                 dialog.dismiss();
             }
         });
@@ -572,7 +570,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     @Override
     public void needUpdate(UpdateVersion updateVersion) {
-        int versionCode = dataManager.getIgnoreThisVersionUpdateTip();
+        int versionCode = presenter.getIgnoreUpdateVersionCode();
         //如果保存的版本号等于当前要升级的版本号，表示用户已经选择不在提示，不显示提示对话框了
         if (versionCode == updateVersion.getVersionCode()) {
             return;
@@ -623,7 +621,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             @Override
             public void onClick(QMUIDialog dialog, int index) {
                 dialog.dismiss();
-                dataManager.setNoticeVersionCode(notice.getVersionCode());
+                presenter.saveNoticeVersionCode(notice.getVersionCode());
             }
         });
         builder.show();

@@ -184,7 +184,7 @@ public class FinishedFragment extends MvpFragment<DownloadView, DownloadPresente
                 v9PornItem.setDownloadId(0);
                 v9PornItem.setSoFarBytes(0);
                 dataManager.updateV9PornItem(v9PornItem);
-                presenter.downloadVideo(v9PornItem, isDownloadNeedWifi, true);
+                presenter.downloadVideo(v9PornItem, true);
                 isFoucesRefresh = true;
                 Intent intent = new Intent(getContext(), DownloadVideoService.class);
                 context.startService(intent);

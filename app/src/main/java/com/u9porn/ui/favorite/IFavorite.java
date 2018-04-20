@@ -13,4 +13,10 @@ public interface IFavorite extends IBaseFavorite {
     void deleteFavorite(String rvid);
 
     void exportData(boolean onlyUrl);
+
+    int getPlayBackEngine();
+
+    boolean isFavoriteNeedRefresh();
+
+    void setFavoriteNeedRefresh(boolean needRefresh);
 }

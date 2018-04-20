@@ -161,7 +161,7 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
 
     @Override
     public void loginSuccess(User user) {
-        user.copyProperties(this.user);
+
     }
 
     @Override
@@ -171,7 +171,6 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
 
     @Override
     public void registerSuccess(User user) {
-        user.copyProperties(this.user);
         saveUserInfoPrf(username, password);
         startMain();
         showMessage("注册成功", TastyToast.SUCCESS);

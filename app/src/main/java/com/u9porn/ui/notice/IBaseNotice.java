@@ -9,5 +9,5 @@ import com.u9porn.ui.update.IBaseUpdate;
  */
 
 public interface IBaseNotice extends IBaseUpdate{
-    void checkNewNotice(int versionCode);
+    void checkNewNotice();
 }

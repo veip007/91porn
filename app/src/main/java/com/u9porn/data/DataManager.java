@@ -10,5 +10,5 @@ import com.u9porn.data.prefs.PreferencesHelper;
  */
 
 public interface DataManager extends DbHelper, ApiHelper, PreferencesHelper {
-
+    String getVideoCacheProxyUrl(String originalVideoUrl);
 }

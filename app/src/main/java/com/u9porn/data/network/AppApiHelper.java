@@ -73,6 +73,10 @@ import io.rx_cache2.Reply;
 public class AppApiHelper implements ApiHelper {
 
     private static final String TAG = AppApiHelper.class.getSimpleName();
+
+    private final static String CHECK_UPDATE_URL = "https://github.com/techGay/v9porn/blob/master/version.txt";
+    private final static String CHECK_NEW_NOTICE_URL = "https://github.com/techGay/v9porn/blob/master/notice.txt";
+
     private CacheProviders cacheProviders;
 
     private V9PornServiceApi v9PornServiceApi;
@@ -463,8 +467,8 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Observable<UpdateVersion> checkUpdate(String url) {
-        return gitHubServiceApi.checkUpdate(url)
+    public Observable<UpdateVersion> checkUpdate() {
+        return gitHubServiceApi.checkUpdate(CHECK_UPDATE_URL)
                 .map(new Function<String, UpdateVersion>() {
                     @Override
                     public UpdateVersion apply(String s) throws Exception {
@@ -476,8 +480,8 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Observable<Notice> checkNewNotice(String url) {
-        return gitHubServiceApi.checkNewNotice(url)
+    public Observable<Notice> checkNewNotice() {
+        return gitHubServiceApi.checkNewNotice(CHECK_NEW_NOTICE_URL)
                 .map(new Function<String, Notice>() {
                     @Override
                     public Notice apply(String s) throws Exception {

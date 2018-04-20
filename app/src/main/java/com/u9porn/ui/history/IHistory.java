@@ -7,4 +7,6 @@ package com.u9porn.ui.history;
 
 public interface IHistory {
     void loadHistoryData(boolean pullToRefresh);
+
+    int getPlayBackEngine();
 }
