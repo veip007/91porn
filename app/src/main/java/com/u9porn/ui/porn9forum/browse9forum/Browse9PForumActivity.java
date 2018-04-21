@@ -27,7 +27,7 @@ import com.u9porn.ui.images.viewimage.PictureViewerActivity;
 import com.u9porn.utils.AppCacheUtils;
 import com.u9porn.utils.AppUtils;
 import com.u9porn.utils.StringUtils;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +174,7 @@ public class Browse9PForumActivity extends MvpActivity<Browse9View, Browse9Prese
             Intent intent = new Intent(Browse9PForumActivity.this, PictureViewerActivity.class);
             intent.putExtra(Keys.KEY_INTENT_PICTURE_VIEWER_CURRENT_IMAGE_POSITION, imageList.indexOf(imageUrl));
             intent.putStringArrayListExtra(Keys.KEY_INTENT_PICTURE_VIEWER_IMAGE_ARRAY_LIST, imageList);
-            startActivityWithAnimotion(intent);
+            startActivityWithAnimation(intent);
         }
     };
 

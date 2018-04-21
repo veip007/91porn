@@ -17,7 +17,7 @@ import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.di.component.DaggerServiceComponent;
 import com.u9porn.ui.download.DownloadActivity;
 import com.u9porn.utils.DownloadManager;
-import com.u9porn.utils.constants.Constants;
+import com.u9porn.constants.Constants;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.u9porn.utils;
 
 
-import com.u9porn.utils.constants.RegexConstants;
+import com.u9porn.constants.RegexConstants;
 
 import java.util.ArrayList;
 import java.util.List;

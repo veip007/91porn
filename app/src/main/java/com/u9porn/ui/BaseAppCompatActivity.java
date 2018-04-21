@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.jaeger.library.StatusBarUtil;
-import com.orhanobut.logger.Logger;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.MyApplication;
 import com.u9porn.R;
@@ -22,7 +21,7 @@ import com.u9porn.di.component.ActivityComponent;
 import com.u9porn.di.component.DaggerActivityComponent;
 import com.u9porn.di.module.ActivityModule;
 import com.u9porn.utils.PlaybackEngine;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import cn.bingoogolapple.swipebacklayout.BGASwipeBackHelper;
 
@@ -135,7 +134,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     /**
      * 带动画的启动activity
      */
-    public void startActivityWithAnimotion(Intent intent) {
+    public void startActivityWithAnimation(Intent intent) {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.side_out_left);
     }
@@ -143,7 +142,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     /**
      * 带动画的启动activity
      */
-    public void startActivityForResultWithAnimotion(Intent intent, int requestCode) {
+    public void startActivityForResultWithAnimation(Intent intent, int requestCode) {
         startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.slide_in_right, R.anim.side_out_left);
     }
@@ -151,7 +150,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
     protected void goToPlayVideo(V9PornItem v9PornItem, int playBackEngine) {
         Intent intent = PlaybackEngine.getPlaybackEngineIntent(this, playBackEngine);
         intent.putExtra(Keys.KEY_INTENT_V9PORN_ITEM, v9PornItem);
-        startActivityWithAnimotion(intent);
+        startActivityWithAnimation(intent);
     }
 
     @Override

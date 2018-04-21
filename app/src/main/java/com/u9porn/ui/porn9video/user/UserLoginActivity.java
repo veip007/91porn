@@ -1,4 +1,4 @@
-package com.u9porn.ui.user;
+package com.u9porn.ui.porn9video.user;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,16 +22,15 @@ import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.util.QMUIKeyboardHelper;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
-import com.u9porn.data.DataManager;
 import com.u9porn.data.model.User;
 import com.u9porn.ui.MvpActivity;
-import com.u9porn.ui.favorite.FavoriteActivity;
+import com.u9porn.ui.porn9video.favorite.FavoriteActivity;
 import com.u9porn.ui.porn9video.search.SearchActivity;
 import com.u9porn.ui.setting.SettingActivity;
 import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.DialogUtils;
 import com.u9porn.utils.GlideApp;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import javax.inject.Inject;
 
@@ -54,13 +53,13 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
     @BindView(R.id.et_captcha)
     EditText etCaptcha;
     @BindView(R.id.wb_captcha)
-    ImageView simpleDraweeView;
+    ImageView captchaImageView;
     @BindView(R.id.bt_user_login)
     Button btUserLogin;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.cb_remenber_password)
-    CheckBox cbRemenberPassword;
+    @BindView(R.id.cb_remember_password)
+    CheckBox cbRememberPassword;
     @BindView(R.id.cb_auto_login)
     CheckBox cbAutoLogin;
 
@@ -74,9 +73,6 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
 
     @Inject
     UserPresenter userPresenter;
-
-    @Inject
-    DataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +93,7 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
                 login(username, password, captcha);
             }
         });
-        simpleDraweeView.setOnClickListener(new View.OnClickListener() {
+        captchaImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadCaptcha();
@@ -109,20 +105,20 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
             public void onClick(View v) {
                 if (cbAutoLogin.isChecked()) {
                     cbAutoLogin.setChecked(true);
-                    cbRemenberPassword.setChecked(true);
+                    cbRememberPassword.setChecked(true);
                 } else {
                     cbAutoLogin.setChecked(false);
                 }
             }
         });
 
-        cbRemenberPassword.setOnClickListener(new View.OnClickListener() {
+        cbRememberPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cbRemenberPassword.isChecked()) {
-                    cbRemenberPassword.setChecked(true);
+                if (cbRememberPassword.isChecked()) {
+                    cbRememberPassword.setChecked(true);
                 } else {
-                    cbRemenberPassword.setChecked(false);
+                    cbRememberPassword.setChecked(false);
                     cbAutoLogin.setChecked(false);
                 }
             }
@@ -133,12 +129,12 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
     }
 
     private void setUpUserInfo() {
-        username = dataManager.getPorn9VideoLoginUserName();
-        password = dataManager.getPorn9VideoLoginUserPassword();
+        username = presenter.getUserName();
+        password = presenter.getPassword();
         if (!TextUtils.isEmpty(password)) {
-            cbRemenberPassword.setChecked(true);
+            cbRememberPassword.setChecked(true);
         }
-        boolean isAutoLogin = dataManager.isPorn9VideoUserAutoLogin();
+        boolean isAutoLogin = presenter.isAutoLogin();
         cbAutoLogin.setChecked(isAutoLogin);
 
         etAccount.setText(username);
@@ -171,7 +167,7 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
 
         Logger.t(TAG).d("验证码链接：" + url);
         Uri uri = Uri.parse(url);
-        GlideApp.with(this).load(uri).placeholder(R.drawable.placeholder).transition(new DrawableTransitionOptions().crossFade(300)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(simpleDraweeView);
+        GlideApp.with(this).load(uri).placeholder(R.drawable.placeholder).transition(new DrawableTransitionOptions().crossFade(300)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(captchaImageView);
     }
 
     @NonNull
@@ -193,7 +189,7 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(context, SettingActivity.class);
-                startActivityWithAnimotion(intent);
+                startActivityWithAnimation(intent);
                 finish();
             }
         });
@@ -218,39 +214,27 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
     @Override
     public void loginSuccess(User user) {
 
-        saveUserInfoPrf(username, password);
+        presenter.saveUserInfoPrf(username, password, cbRememberPassword.isChecked(), cbAutoLogin.isChecked());
         showMessage("登录成功", TastyToast.SUCCESS);
+        switchWhereToGo();
+    }
+
+
+    private void switchWhereToGo() {
         switch (loginForAction) {
             case LOGIN_ACTION_FOR_LOOK_MY_FAVORITE:
                 Intent intent = new Intent(this, FavoriteActivity.class);
-                startActivityWithAnimotion(intent);
+                startActivityWithAnimation(intent);
                 finish();
                 break;
             case LOGIN_ACTION_FOR_SEARCH_91PRON_VIDEO:
                 Intent intentSearch = new Intent(this, SearchActivity.class);
-                startActivityWithAnimotion(intentSearch);
+                startActivityWithAnimation(intentSearch);
                 finish();
                 break;
             default:
                 setResult(RESULT_OK);
                 onBackPressed();
-        }
-
-    }
-
-    private void saveUserInfoPrf(String username, String password) {
-        dataManager.setPorn9VideoLoginUserName(username);
-        //记住密码
-        if (cbRemenberPassword.isChecked()) {
-            dataManager.setPorn9VideoLoginUserPassWord(password);
-        } else {
-            dataManager.setPorn9VideoLoginUserPassWord("");
-        }
-        //自动登录
-        if (cbAutoLogin.isChecked()) {
-            dataManager.setPorn9VideoUserAutoLogin(true);
-        } else {
-            dataManager.setPorn9VideoUserAutoLogin(false);
         }
     }
 
@@ -312,7 +296,7 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_user_register) {
             Intent intent = new Intent(this, UserRegisterActivity.class);
-            startActivityWithAnimotion(intent);
+            startActivityWithAnimation(intent);
             return true;
         }
 

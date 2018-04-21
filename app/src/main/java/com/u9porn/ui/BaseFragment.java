@@ -1,7 +1,6 @@
 package com.u9porn.ui;
 
 import android.app.Activity;
-import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,24 +8,16 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
-import com.danikula.videocache.HttpProxyCacheServer;
-import com.orhanobut.logger.Logger;
 import com.sdsmdg.tastytoast.TastyToast;
-import com.trello.lifecycle2.android.lifecycle.AndroidLifecycle;
-import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.MyApplication;
 import com.u9porn.R;
-import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.Category;
 import com.u9porn.data.db.entity.V9PornItem;
-import com.u9porn.data.model.User;
 import com.u9porn.di.component.ActivityComponent;
 import com.u9porn.di.component.DaggerActivityComponent;
 import com.u9porn.di.module.ActivityModule;
 import com.u9porn.utils.PlaybackEngine;
-import com.u9porn.utils.constants.Keys;
-
-import javax.inject.Inject;
+import com.u9porn.constants.Keys;
 
 /**
  * @author flymegoc
@@ -37,21 +28,12 @@ import javax.inject.Inject;
 public abstract class BaseFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
     private final String KEY_SAVE_DIN_STANCE_STATE_CATEGORY = "key_save_din_stance_state_category";
-    protected final LifecycleProvider<Lifecycle.Event> provider = AndroidLifecycle.createLifecycleProvider(this);
+
     protected Context context;
     protected Activity activity;
     protected Category category;
     protected boolean mIsLoadedData;
     private ActivityComponent mActivityComponent;
-
-    @Inject
-    protected HttpProxyCacheServer httpProxyCacheServer;
-
-    @Inject
-    protected User user;
-
-    @Inject
-    protected DataManager dataManager;
 
     @Override
     public void onAttach(Context context) {
@@ -152,7 +134,7 @@ public abstract class BaseFragment extends Fragment {
     /**
      * 带动画的启动activity
      */
-    public void startActivityWithAnimotion(Intent intent) {
+    public void startActivityWithAnimation(Intent intent) {
         startActivity(intent);
         playAnimation();
     }
@@ -160,7 +142,7 @@ public abstract class BaseFragment extends Fragment {
     /**
      * 带动画的启动activity
      */
-    public void startActivityForResultWithAnimotion(Intent intent, int requestCode) {
+    public void startActivityForResultWithAnimation(Intent intent, int requestCode) {
         startActivityForResult(intent, requestCode);
         playAnimation();
     }
@@ -171,8 +153,8 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    protected void goToPlayVideo(V9PornItem v9PornItem) {
-        Intent intent = PlaybackEngine.getPlaybackEngineIntent(getContext(), dataManager.getPlaybackEngine());
+    protected void goToPlayVideo(V9PornItem v9PornItem, int playBackEngine) {
+        Intent intent = PlaybackEngine.getPlaybackEngineIntent(getContext(), playBackEngine);
         intent.putExtra(Keys.KEY_INTENT_V9PORN_ITEM, v9PornItem);
         if (activity != null) {
             startActivity(intent);
@@ -190,17 +172,6 @@ public abstract class BaseFragment extends Fragment {
         this.category = category;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Logger.t(TAG).d("------------------onDestroyView()");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Logger.t(TAG).d("------------------onDestroy()");
-    }
 
     protected void showMessage(String msg, int type) {
         TastyToast.makeText(context.getApplicationContext(), msg, TastyToast.LENGTH_SHORT, type).show();

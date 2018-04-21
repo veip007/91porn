@@ -1,4 +1,4 @@
-package com.u9porn.ui.history;
+package com.u9porn.ui.porn9video.history;
 
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.ui.BaseView;

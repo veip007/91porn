@@ -25,14 +25,12 @@ public class MainPresenter extends MvpBasePresenter<MainView> implements IMain {
     private UpdatePresenter updatePresenter;
     private NoticePresenter noticePresenter;
     private DataManager dataManager;
-    private User user;
 
     @Inject
-    public MainPresenter(DataManager dataManager, UpdatePresenter updatePresenter, NoticePresenter noticePresenter, User user) {
+    public MainPresenter(DataManager dataManager, UpdatePresenter updatePresenter, NoticePresenter noticePresenter) {
         this.dataManager = dataManager;
         this.updatePresenter = updatePresenter;
         this.noticePresenter = noticePresenter;
-        this.user = user;
     }
 
     @Override
@@ -157,6 +155,6 @@ public class MainPresenter extends MvpBasePresenter<MainView> implements IMain {
 
     @Override
     public boolean isUserLogin() {
-        return UserHelper.isUserInfoComplete(user);
+        return dataManager.isUserLogin();
     }
 }

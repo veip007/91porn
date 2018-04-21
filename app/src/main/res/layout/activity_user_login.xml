@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/common_background"
-    tools:context="com.u9porn.ui.user.UserLoginActivity">
+    tools:context="com.u9porn.ui.porn9video.user.UserLoginActivity">
 
     <include layout="@layout/layout_toolbar" />
 
@@ -75,7 +75,7 @@
             android:orientation="horizontal">
 
             <CheckBox
-                android:id="@+id/cb_remenber_password"
+                android:id="@+id/cb_remember_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

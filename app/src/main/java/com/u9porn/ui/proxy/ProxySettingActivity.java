@@ -225,7 +225,7 @@ public class ProxySettingActivity extends MvpActivity<ProxyView, ProxyPresenter>
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(context, SettingActivity.class);
-                startActivityWithAnimotion(intent);
+                startActivityWithAnimation(intent);
                 finish();
             }
         });

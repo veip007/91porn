@@ -111,10 +111,10 @@ public class V9PornItem implements Serializable {
         return id.hashCode();
     }
 
-    public String getDownLoadPath(DataManager dataManager) {
+    public String getDownLoadPath(String customDownloadVideoDirPath) {
         //先读取自定义目录
-        if (!TextUtils.isEmpty(dataManager.getCustomDownloadVideoDirPath())) {
-            return dataManager.getCustomDownloadVideoDirPath() + getViewKey() + ".mp4";
+        if (!TextUtils.isEmpty(customDownloadVideoDirPath)) {
+            return customDownloadVideoDirPath + getViewKey() + ".mp4";
         }
 
         return SDCardUtils.DOWNLOAD_VIDEO_PATH + getViewKey() + ".mp4";

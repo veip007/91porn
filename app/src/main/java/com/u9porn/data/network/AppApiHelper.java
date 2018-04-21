@@ -41,10 +41,10 @@ import com.u9porn.parser.ParsePa;
 import com.u9porn.parser.ParseProxy;
 import com.u9porn.rxjava.RetryWhenProcess;
 import com.u9porn.utils.AddressHelper;
-import com.u9porn.utils.HeaderUtils;
-import com.u9porn.utils.MyProxySelector;
+import com.u9porn.data.network.okhttp.HeaderUtils;
+import com.u9porn.data.network.okhttp.MyProxySelector;
 import com.u9porn.utils.UserHelper;
-import com.u9porn.utils.constants.Constants;
+import com.u9porn.constants.Constants;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

@@ -1,6 +1,7 @@
 package com.u9porn.data;
 
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.u9porn.cookie.CookieManager;
 import com.u9porn.data.db.DbHelper;
 import com.u9porn.data.model.BaseResult;
 import com.u9porn.data.db.entity.Category;
@@ -20,6 +21,7 @@ import com.u9porn.data.model.VideoComment;
 import com.u9porn.data.db.entity.VideoResult;
 import com.u9porn.data.network.ApiHelper;
 import com.u9porn.data.prefs.PreferencesHelper;
+import com.u9porn.utils.UserHelper;
 
 import java.util.List;
 
@@ -43,12 +45,17 @@ public class AppDataManager implements DataManager {
 
     private final HttpProxyCacheServer httpProxyCacheServer;
 
+    private CookieManager cookieManager;
+    private User user;
+
     @Inject
-    AppDataManager(DbHelper mDbHelper, PreferencesHelper mPreferencesHelper, ApiHelper mApiHelper, HttpProxyCacheServer httpProxyCacheServer) {
+    AppDataManager(DbHelper mDbHelper, PreferencesHelper mPreferencesHelper, ApiHelper mApiHelper, HttpProxyCacheServer httpProxyCacheServer, CookieManager cookieManager, User user) {
         this.mDbHelper = mDbHelper;
         this.mPreferencesHelper = mPreferencesHelper;
         this.mApiHelper = mApiHelper;
         this.httpProxyCacheServer = httpProxyCacheServer;
+        this.cookieManager = cookieManager;
+        this.user = user;
     }
 
     @Override
@@ -529,5 +536,31 @@ public class AppDataManager implements DataManager {
     @Override
     public String getVideoCacheProxyUrl(String originalVideoUrl) {
         return httpProxyCacheServer.getProxyUrl(originalVideoUrl, true);
+    }
+
+    @Override
+    public boolean isVideoCacheByProxy(String originalVideoUrl) {
+        return httpProxyCacheServer.isCached(originalVideoUrl);
+    }
+
+    @Override
+    public void existLogin() {
+        cookieManager.cleanAllCookies();
+        user.cleanProperties();
+    }
+
+    @Override
+    public void resetPorn91VideoWatchTime(boolean reset) {
+        cookieManager.resetPorn91VideoWatchTime(reset);
+    }
+
+    @Override
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public boolean isUserLogin() {
+        return UserHelper.isUserInfoComplete(user);
     }
 }

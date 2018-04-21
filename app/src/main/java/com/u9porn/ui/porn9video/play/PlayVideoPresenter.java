@@ -10,7 +10,6 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.orhanobut.logger.Logger;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.trello.rxlifecycle2.LifecycleProvider;
-import com.u9porn.cookie.CookieManager;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.data.model.User;
@@ -22,7 +21,7 @@ import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RetryWhenProcess;
 import com.u9porn.rxjava.RxSchedulersHelper;
 import com.u9porn.ui.download.DownloadPresenter;
-import com.u9porn.ui.favorite.FavoritePresenter;
+import com.u9porn.ui.porn9video.favorite.FavoritePresenter;
 import com.u9porn.utils.UserHelper;
 
 import java.util.Date;
@@ -51,17 +50,12 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
     private int start = 1;
     private DataManager dataManager;
 
-    private CookieManager cookieManager;
-    private User user;
-
     @Inject
-    public PlayVideoPresenter(FavoritePresenter favoritePresenter, DownloadPresenter downloadPresenter, LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, CookieManager cookieManager, User user) {
+    public PlayVideoPresenter(FavoritePresenter favoritePresenter, DownloadPresenter downloadPresenter, LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
         this.favoritePresenter = favoritePresenter;
         this.downloadPresenter = downloadPresenter;
         this.provider = provider;
         this.dataManager = dataManager;
-        this.cookieManager = cookieManager;
-        this.user = user;
     }
 
     @Override
@@ -74,7 +68,7 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
                         if (TextUtils.isEmpty(videoResult.getVideoUrl())) {
                             if (VideoResult.OUT_OF_WATCH_TIMES.equals(videoResult.getId())) {
                                 //尝试强行重置，并上报异常
-                                cookieManager.resetPorn91VideoWatchTime(true);
+                                dataManager.resetPorn91VideoWatchTime(true);
                                 Bugsnag.notify(new Throwable(TAG + ":ten videos each day "), Severity.WARNING);
                                 throw new VideoException("观看次数达到上限了！");
                             } else {
@@ -100,7 +94,7 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
 
                     @Override
                     public void onSuccess(final VideoResult videoResult) {
-                        cookieManager.resetPorn91VideoWatchTime(false);
+                        dataManager.resetPorn91VideoWatchTime(false);
                         ifViewAttached(new ViewAction<PlayVideoView>() {
                             @Override
                             public void run(@NonNull PlayVideoView view) {
@@ -279,12 +273,12 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
 
     @Override
     public boolean isUserLogin() {
-        return UserHelper.isUserInfoComplete(user);
+        return dataManager.isUserLogin();
     }
 
     @Override
     public int getLoginUserId() {
-        return user.getUserId();
+        return dataManager.getUser().getUserId();
     }
 
     @Override

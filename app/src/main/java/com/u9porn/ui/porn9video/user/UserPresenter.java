@@ -1,4 +1,4 @@
-package com.u9porn.ui.user;
+package com.u9porn.ui.porn9video.user;
 
 import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
@@ -25,13 +25,11 @@ public class UserPresenter extends MvpBasePresenter<UserView> implements IUser {
 
     private LifecycleProvider<Lifecycle.Event> provider;
     private DataManager dataManager;
-    private User user;
 
     @Inject
-    public UserPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, User user) {
+    public UserPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
         this.provider = provider;
         this.dataManager = dataManager;
-        this.user = user;
     }
 
     @Override
@@ -58,7 +56,7 @@ public class UserPresenter extends MvpBasePresenter<UserView> implements IUser {
 
                     @Override
                     public void onSuccess(final User user) {
-                        user.copyProperties(UserPresenter.this.user);
+                        user.copyProperties(dataManager.getUser());
                         if (loginListener != null) {
                             loginListener.loginSuccess(user);
                         } else {
@@ -111,7 +109,7 @@ public class UserPresenter extends MvpBasePresenter<UserView> implements IUser {
                         ifViewAttached(new ViewAction<UserView>() {
                             @Override
                             public void run(@NonNull UserView view) {
-                                user.copyProperties(UserPresenter.this.user);
+                                user.copyProperties(dataManager.getUser());
                                 view.showContent();
                                 view.registerSuccess(user);
                             }
@@ -129,6 +127,53 @@ public class UserPresenter extends MvpBasePresenter<UserView> implements IUser {
                         });
                     }
                 });
+    }
+
+    /**
+     * 注册成功，默认保存用户名和密码
+     */
+    @Override
+    public void saveUserInfoPrf(String username, String password) {
+        dataManager.setPorn9VideoLoginUserName(username);
+        //记住密码
+        dataManager.setPorn9VideoLoginUserPassWord(password);
+    }
+
+    @Override
+    public void saveUserInfoPrf(String username, String password, boolean isRememberPassword, boolean isAutoLogin) {
+        dataManager.setPorn9VideoLoginUserName(username);
+        //记住密码
+        if (isRememberPassword) {
+            dataManager.setPorn9VideoLoginUserPassWord(password);
+        } else {
+            dataManager.setPorn9VideoLoginUserPassWord("");
+        }
+        //自动登录
+        if (isAutoLogin) {
+            dataManager.setPorn9VideoUserAutoLogin(true);
+        } else {
+            dataManager.setPorn9VideoUserAutoLogin(false);
+        }
+    }
+
+    @Override
+    public String getUserName() {
+        return dataManager.getPorn9VideoLoginUserName();
+    }
+
+    @Override
+    public String getPassword() {
+        return dataManager.getPorn9VideoLoginUserPassword();
+    }
+
+    @Override
+    public boolean isAutoLogin() {
+        return dataManager.isPorn9VideoUserAutoLogin();
+    }
+
+    @Override
+    public void existLogin() {
+        dataManager.existLogin();
     }
 
     public interface LoginListener {

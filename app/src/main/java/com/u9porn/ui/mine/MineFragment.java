@@ -21,19 +21,21 @@ import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView;
 import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView;
 import com.u9porn.R;
 import com.u9porn.data.model.User;
-import com.u9porn.ui.BaseFragment;
+import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.about.AboutActivity;
 import com.u9porn.ui.download.DownloadActivity;
-import com.u9porn.ui.favorite.FavoriteActivity;
-import com.u9porn.ui.history.HistoryActivity;
+import com.u9porn.ui.porn9video.favorite.FavoriteActivity;
+import com.u9porn.ui.porn9video.history.HistoryActivity;
 import com.u9porn.ui.main.MainActivity;
 import com.u9porn.ui.proxy.ProxySettingActivity;
 import com.u9porn.ui.setting.SettingActivity;
-import com.u9porn.ui.user.UserLoginActivity;
+import com.u9porn.ui.porn9video.user.UserLoginActivity;
 import com.u9porn.utils.UserHelper;
-import com.u9porn.utils.constants.Constants;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Constants;
+import com.u9porn.constants.Keys;
 import com.u9porn.widget.ObservableScrollView;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +48,7 @@ import static android.app.Activity.RESULT_OK;
  *
  * @author flymegoc
  */
-public class MineFragment extends BaseFragment implements View.OnClickListener {
+public class MineFragment extends MvpFragment<MineView, MinePresenter> implements View.OnClickListener {
 
     private static final String TAG = MineFragment.class.getSimpleName();
     @BindView(R.id.tv_nav_username)
@@ -73,6 +75,8 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     private int scrollYPosition = 0;
     private QMUICommonListItemView openProxyItemWithSwitch;
 
+    @Inject
+    protected MinePresenter minePresenter;
 
     public MineFragment() {
 
@@ -97,6 +101,13 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         return inflater.inflate(R.layout.fragment_mine, container, false);
     }
 
+    @NonNull
+    @Override
+    public MinePresenter createPresenter() {
+        getActivityComponent().inject(this);
+        return minePresenter;
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -111,9 +122,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         observableScrollView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                int scrollYPosition = dataManager.getSettingScrollViewScrollPosition();
+                int scrollYPosition = presenter.getSettingScrollViewScrollPosition();
                 if (scrollYPosition > 0) {
-                    dataManager.setSettingScrollViewScrollPosition(0);
+                    presenter.setSettingScrollViewScrollPosition(0);
                     observableScrollView.scrollTo(0, scrollYPosition);
                 }
             }
@@ -124,9 +135,9 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        setUpUserInfo(user);
-        String proxyStr = dataManager.getProxyIpAddress();
-        int proxyPort = dataManager.getProxyPort();
+        setUpUserInfo(presenter.getLoginUser());
+        String proxyStr = presenter.getProxyIpAddress();
+        int proxyPort = presenter.getProxyPort();
         updateProxySetUI(proxyStr, proxyPort);
     }
 
@@ -148,15 +159,15 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
 
     private void initMineSection() {
 
-        boolean openNightMode = dataManager.isOpenNightMode();
+        boolean openNightMode = presenter.isOpenNightMode();
         QMUICommonListItemView openNightModeItemWithSwitch = mineList.createItemView(nightModeStr);
         openNightModeItemWithSwitch.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_SWITCH);
         openNightModeItemWithSwitch.getSwitch().setChecked(openNightMode);
         openNightModeItemWithSwitch.getSwitch().setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                dataManager.setOpenNightMode(isChecked);
-                dataManager.setSettingScrollViewScrollPosition(scrollYPosition);
+                presenter.setOpenNightMode(isChecked);
+                presenter.setSettingScrollViewScrollPosition(scrollYPosition);
                 AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
                 Intent intent = new Intent(context, MainActivity.class);
                 intent.putExtra(Keys.KEY_SELECT_INDEX, 4);
@@ -166,11 +177,11 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             }
         });
 
-        boolean openProxy = dataManager.isOpenHttpProxy();
+        boolean openProxy = presenter.isOpenHttpProxy();
         openProxyItemWithSwitch = mineList.createItemView(proxyStr);
         openProxyItemWithSwitch.setOrientation(QMUICommonListItemView.VERTICAL);
-        final String proxyHost = dataManager.getProxyIpAddress();
-        final int port = dataManager.getProxyPort();
+        final String proxyHost = presenter.getProxyIpAddress();
+        final int port = presenter.getProxyPort();
         if (TextUtils.isEmpty(proxyHost) || port == 0) {
             openProxyItemWithSwitch.setDetailText("长按设置");
         } else {
@@ -184,10 +195,10 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (TextUtils.isEmpty(proxyHost) || port == 0) {
                     buttonView.setChecked(false);
-                    dataManager.setOpenHttpProxy(false);
+                    presenter.setOpenHttpProxy(false);
                     return;
                 }
-                dataManager.setOpenHttpProxy(isChecked);
+                presenter.setOpenHttpProxy(isChecked);
             }
         });
 
@@ -214,7 +225,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public boolean onLongClick(View v) {
                         Intent intent = new Intent(context, ProxySettingActivity.class);
-                        startActivityWithAnimotion(intent);
+                        startActivityWithAnimation(intent);
                         return false;
                     }
                 })
@@ -239,16 +250,16 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         if (!TextUtils.isEmpty(proxyStr) && proxyPort > 0) {
             openProxyItemWithSwitch.setDetailText(proxyStr + " : " + proxyPort);
         }
-        boolean openProxy = dataManager.isOpenHttpProxy();
+        boolean openProxy = presenter.isOpenHttpProxy();
         openProxyItemWithSwitch.getSwitch().setChecked(openProxy);
     }
 
     private void userImageViewClick() {
-        if (UserHelper.isUserInfoComplete(user)) {
+        if (presenter.isUserLogin()) {
             return;
         }
         Intent intent = new Intent(context, UserLoginActivity.class);
-        startActivityForResultWithAnimotion(intent, Constants.USER_LOGIN_REQUEST_CODE);
+        startActivityForResultWithAnimation(intent, Constants.USER_LOGIN_REQUEST_CODE);
     }
 
     @SuppressLint("SetTextI18n")
@@ -275,7 +286,7 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.USER_LOGIN_REQUEST_CODE && resultCode == RESULT_OK) {
-            setUpUserInfo(user);
+            setUpUserInfo(presenter.getLoginUser());
         }
     }
 
@@ -306,26 +317,26 @@ public class MineFragment extends BaseFragment implements View.OnClickListener {
         }
 
         if (content.equals(myFavoriteStr)) {
-            if (!UserHelper.isUserInfoComplete(user)) {
+            if (!presenter.isUserLogin()) {
                 Intent intent = new Intent(context, UserLoginActivity.class);
                 intent.putExtra(Keys.KEY_INTENT_LOGIN_FOR_ACTION, UserLoginActivity.LOGIN_ACTION_FOR_LOOK_MY_FAVORITE);
-                startActivityForResultWithAnimotion(intent, Constants.USER_LOGIN_REQUEST_CODE);
+                startActivityForResultWithAnimation(intent, Constants.USER_LOGIN_REQUEST_CODE);
                 return;
             }
             Intent intent = new Intent(context, FavoriteActivity.class);
-            startActivityWithAnimotion(intent);
+            startActivityWithAnimation(intent);
         } else if (content.equals(myDownloadStr)) {
             Intent intent = new Intent(context, DownloadActivity.class);
-            startActivityWithAnimotion(intent);
+            startActivityWithAnimation(intent);
         } else if (content.equals(viewHistoryStr)) {
             Intent intent = new Intent(context, HistoryActivity.class);
-            startActivityWithAnimotion(intent);
+            startActivityWithAnimation(intent);
         } else if (content.equals(aboutMeStr)) {
             Intent intent = new Intent(context, AboutActivity.class);
-            startActivityWithAnimotion(intent);
+            startActivityWithAnimation(intent);
         } else if (content.equals(moreSettingStr)) {
             Intent intent = new Intent(context, SettingActivity.class);
-            startActivityWithAnimotion(intent);
+            startActivityWithAnimation(intent);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.u9porn.utils;
+package com.u9porn.data.network.okhttp;
 
 import android.support.annotation.NonNull;
 

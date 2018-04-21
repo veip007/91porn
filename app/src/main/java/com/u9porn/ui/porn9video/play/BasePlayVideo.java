@@ -42,12 +42,11 @@ import com.u9porn.data.model.VideoComment;
 import com.u9porn.service.DownloadVideoService;
 import com.u9porn.ui.MvpActivity;
 import com.u9porn.ui.porn9video.author.AuthorActivity;
-import com.u9porn.ui.user.UserLoginActivity;
-import com.u9porn.utils.AddressHelper;
+import com.u9porn.ui.porn9video.user.UserLoginActivity;
 import com.u9porn.utils.AppUtils;
 import com.u9porn.utils.DialogUtils;
 import com.u9porn.utils.LoadHelperUtils;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -251,7 +250,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
                 }
                 Intent intent = new Intent(BasePlayVideo.this, AuthorActivity.class);
                 intent.putExtra(Keys.KEY_INTENT_UID, v9PornItem.getVideoResult().getOwnerId());
-                startActivityForResultWithAnimotion(intent, 1);
+                startActivityForResultWithAnimation(intent, 1);
             }
         });
     }
@@ -609,7 +608,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
 
     private void goToLogin() {
         Intent intent = new Intent(this, UserLoginActivity.class);
-        startActivityWithAnimotion(intent);
+        startActivityWithAnimation(intent);
     }
 
     @Override

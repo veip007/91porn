@@ -195,7 +195,18 @@ public class ParseForum9Porn {
     public static BaseResult<F9PornContent> parseContent(String html, boolean isNightModel, String baseUrl) {
         BaseResult<F9PornContent> baseResult = new BaseResult<>();
         Document doc = Jsoup.parse(html);
-
+        //尝试解析header中的地址
+        Element linkTag = doc.select("link").first();
+        String address = null;
+        if (linkTag != null) {
+            String href = linkTag.attr("href");
+            address = StringUtils.subString(href, 0, href.indexOf("archiver"));
+        }
+        //如果成功解析到地址且和原地址不同，则替换
+        if (!TextUtils.isEmpty(address) && !address.equals(baseUrl)) {
+            baseUrl = address;
+            Logger.t(TAG).e("替换地址为::::" + address);
+        }
         Element content = doc.getElementsByClass("t_msgfontfix").first();
 
         if (content == null) {
@@ -206,7 +217,6 @@ public class ParseForum9Porn {
             baseResult.setData(f9PornContent);
             return baseResult;
         }
-        Logger.t(TAG).d(content);
         Elements attachPopups = doc.getElementsByClass("imgtitle");
         if (attachPopups != null) {
             for (Element element : attachPopups) {

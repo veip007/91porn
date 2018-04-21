@@ -13,7 +13,7 @@ import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RxSchedulersHelper;
 import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.RegexUtils;
-import com.u9porn.utils.constants.Constants;
+import com.u9porn.constants.Constants;
 
 import java.util.List;
 

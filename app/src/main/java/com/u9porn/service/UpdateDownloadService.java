@@ -21,7 +21,7 @@ import com.orhanobut.logger.Logger;
 import com.u9porn.BuildConfig;
 import com.u9porn.R;
 import com.u9porn.data.model.UpdateVersion;
-import com.u9porn.utils.constants.Constants;
+import com.u9porn.constants.Constants;
 
 import java.io.File;
 

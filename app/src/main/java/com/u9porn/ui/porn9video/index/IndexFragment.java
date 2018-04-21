@@ -99,7 +99,7 @@ public class IndexFragment extends MvpFragment<IndexView, IndexPresenter> implem
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 V9PornItem v9PornItems = mV9PornItemList.get(position);
-                goToPlayVideo(v9PornItems);
+                goToPlayVideo(v9PornItems, presenter.getPlayBackEngine());
             }
         });
 
@@ -110,7 +110,7 @@ public class IndexFragment extends MvpFragment<IndexView, IndexPresenter> implem
                 loadData(false, true);
             }
         });
-        AppUtils.setColorSchemeColors(context,contentView);
+        AppUtils.setColorSchemeColors(context, contentView);
     }
 
     @Override

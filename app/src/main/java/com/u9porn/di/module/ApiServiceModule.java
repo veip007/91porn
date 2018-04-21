@@ -18,8 +18,8 @@ import com.u9porn.data.network.apiservice.V9PornServiceApi;
 import com.u9porn.data.network.apiservice.ProxyServiceApi;
 import com.u9porn.di.ApplicationContext;
 import com.u9porn.utils.AddressHelper;
-import com.u9porn.utils.CommonHeaderInterceptor;
-import com.u9porn.utils.MyProxySelector;
+import com.u9porn.data.network.okhttp.CommonHeaderInterceptor;
+import com.u9porn.data.network.okhttp.MyProxySelector;
 
 import java.net.Proxy;
 import java.util.ArrayList;

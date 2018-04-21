@@ -1,10 +1,13 @@
 package com.u9porn.data.model;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * @author flymegoc
  * @date 2017/12/10
  */
-
+@Singleton
 public class User {
     private String userName;
     private boolean isLogin;
@@ -12,6 +15,10 @@ public class User {
     private String status;
     private String lastLoginTime;
     private String lastLoginIP;
+
+    @Inject
+    public User() {
+    }
 
     public String getLastLoginTime() {
         return lastLoginTime;

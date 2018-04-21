@@ -3,8 +3,9 @@ package com.u9porn.ui.splash;
 import android.support.annotation.NonNull;
 
 import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
+import com.u9porn.data.DataManager;
 import com.u9porn.data.model.User;
-import com.u9porn.ui.user.UserPresenter;
+import com.u9porn.ui.porn9video.user.UserPresenter;
 import com.u9porn.utils.UserHelper;
 
 import javax.inject.Inject;
@@ -17,12 +18,12 @@ import javax.inject.Inject;
 public class SplashPresenter extends MvpBasePresenter<SplashView> implements ISplash {
 
     private UserPresenter userPresenter;
-    private User user;
+    private DataManager dataManager;
 
     @Inject
-    public SplashPresenter(UserPresenter userPresenter, User user) {
+    public SplashPresenter(UserPresenter userPresenter, DataManager dataManager) {
         this.userPresenter = userPresenter;
-        this.user = user;
+        this.dataManager = dataManager;
     }
 
     @Override
@@ -33,7 +34,7 @@ public class SplashPresenter extends MvpBasePresenter<SplashView> implements ISp
                 ifViewAttached(new ViewAction<SplashView>() {
                     @Override
                     public void run(@NonNull SplashView view) {
-                        user.copyProperties(SplashPresenter.this.user);
+                        user.copyProperties(dataManager.getUser());
                         view.loginSuccess(user);
                     }
                 });
@@ -53,6 +54,21 @@ public class SplashPresenter extends MvpBasePresenter<SplashView> implements ISp
 
     @Override
     public boolean isUserLogin() {
-        return UserHelper.isUserInfoComplete(user);
+        return dataManager.isUserLogin();
+    }
+
+    @Override
+    public String getPorn9VideoLoginUserName() {
+        return dataManager.getPorn9VideoLoginUserName();
+    }
+
+    @Override
+    public String getPorn9VideoLoginUserPassword() {
+        return dataManager.getPorn9VideoLoginUserPassword();
+    }
+
+    @Override
+    public boolean isPorn9VideoUserAutoLogin() {
+        return dataManager.isPorn9VideoUserAutoLogin();
     }
 }

@@ -53,9 +53,6 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
     private ArrayList<V9PornItem> mV9PornItemList;
 
     @Inject
-    protected DataManager dataManager;
-
-    @Inject
     protected DownloadPresenter downloadPresenter;
 
     @Inject
@@ -67,13 +64,13 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
         @Override
         public void connected() {
             Logger.t(TAG).d("连接上下载服务");
-            List<V9PornItem> v9PornItems = dataManager.loadDownloadingData();
+            List<V9PornItem> v9PornItems = presenter.loadDownloadingDatas();
             for (V9PornItem v9PornItem : v9PornItems) {
-                int status = FileDownloader.getImpl().getStatus(v9PornItem.getVideoResult().getVideoUrl(), v9PornItem.getDownLoadPath(dataManager));
+                int status = FileDownloader.getImpl().getStatus(v9PornItem.getVideoResult().getVideoUrl(), v9PornItem.getDownLoadPath(presenter.getCustomDownloadVideoDirPath()));
                 Logger.t(TAG).d("fix status:::" + status);
                 if (status != v9PornItem.getStatus()) {
                     v9PornItem.setStatus(status);
-                    dataManager.updateV9PornItem(v9PornItem);
+                    presenter.updateV9PornItem(v9PornItem);
                 }
             }
             presenter.loadDownloadingData();
@@ -157,7 +154,6 @@ public class DownloadingFragment extends MvpFragment<DownloadView, DownloadPrese
     }
 
     private void startDownload(V9PornItem v9PornItem, View view, boolean isForceReDownload) {
-        boolean isDownloadNeedWifi = dataManager.isDownloadVideoNeedWifi();
         presenter.downloadVideo(v9PornItem, isForceReDownload);
         ((ImageView) view).setImageResource(R.drawable.pause_download);
         Intent intent = new Intent(getContext(), DownloadVideoService.class);

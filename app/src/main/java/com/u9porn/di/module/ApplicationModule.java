@@ -24,7 +24,7 @@ import com.u9porn.di.PreferenceInfo;
 import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.AppCacheUtils;
 import com.u9porn.utils.VideoCacheFileNameGenerator;
-import com.u9porn.utils.constants.Constants;
+import com.u9porn.constants.Constants;
 
 import java.io.File;
 
@@ -77,12 +77,6 @@ public class ApplicationModule {
         return new RxCache.Builder()
                 .persistence(cacheDir, new GsonSpeaker())
                 .using(CacheProviders.class);
-    }
-
-    @Singleton
-    @Provides
-    User providesUser() {
-        return new User();
     }
 
     @Singleton

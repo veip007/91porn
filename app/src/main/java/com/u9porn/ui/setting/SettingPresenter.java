@@ -41,15 +41,11 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> implements I
 
     private static final String TAG = SearchPresenter.class.getSimpleName();
     private DataManager dataManager;
-    private User user;
-    private CookieManager cookieManager;
 
     @Inject
-    public SettingPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, User user, CookieManager cleanAllCookies) {
+    public SettingPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
         super(provider);
         this.dataManager = dataManager;
-        this.user = user;
-        this.cookieManager = cleanAllCookies;
     }
 
     @Override
@@ -279,13 +275,12 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> implements I
 
     @Override
     public boolean isUserLogin() {
-        return UserHelper.isUserInfoComplete(user);
+        return dataManager.isUserLogin();
     }
 
     @Override
     public void existLogin() {
-        cookieManager.cleanAllCookies();
-        user.cleanProperties();
+        dataManager.existLogin();
     }
 
     @Override

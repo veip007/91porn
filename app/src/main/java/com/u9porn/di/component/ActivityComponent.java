@@ -7,8 +7,8 @@ import com.u9porn.ui.basemain.BaseMainFragment;
 import com.u9porn.ui.download.DownloadActivity;
 import com.u9porn.ui.download.DownloadingFragment;
 import com.u9porn.ui.download.FinishedFragment;
-import com.u9porn.ui.favorite.FavoriteActivity;
-import com.u9porn.ui.history.HistoryActivity;
+import com.u9porn.ui.porn9video.favorite.FavoriteActivity;
+import com.u9porn.ui.porn9video.history.HistoryActivity;
 import com.u9porn.ui.images.meizitu.MeiZiTuFragment;
 import com.u9porn.ui.images.mm99.Mm99Fragment;
 import com.u9porn.ui.images.viewimage.PictureViewerActivity;
@@ -27,8 +27,8 @@ import com.u9porn.ui.porn9video.videolist.VideoListFragment;
 import com.u9porn.ui.proxy.ProxySettingActivity;
 import com.u9porn.ui.setting.SettingActivity;
 import com.u9porn.ui.splash.SplashActivity;
-import com.u9porn.ui.user.UserLoginActivity;
-import com.u9porn.ui.user.UserRegisterActivity;
+import com.u9porn.ui.porn9video.user.UserLoginActivity;
+import com.u9porn.ui.porn9video.user.UserRegisterActivity;
 
 import dagger.Component;
 

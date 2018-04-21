@@ -47,14 +47,13 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
 
     private DataManager dataManager;
     private LifecycleProvider<Lifecycle.Event> provider;
-    private HttpProxyCacheServer proxy;
+
     private File videoCacheDir;
 
     @Inject
-    public DownloadPresenter(DataManager dataManager, LifecycleProvider<Lifecycle.Event> provider, HttpProxyCacheServer proxy, File videoCacheDir) {
+    public DownloadPresenter(DataManager dataManager, LifecycleProvider<Lifecycle.Event> provider, File videoCacheDir) {
         this.dataManager = dataManager;
         this.provider = provider;
-        this.proxy = proxy;
         this.videoCacheDir = videoCacheDir;
     }
 
@@ -86,7 +85,7 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
         }
         VideoResult videoResult = tmp.getVideoResult();
         //先检查文件
-        File toFile = new File(tmp.getDownLoadPath(dataManager));
+        File toFile = new File(tmp.getDownLoadPath(getCustomDownloadVideoDirPath()));
         if (toFile.exists() && toFile.length() > 0) {
             if (downloadListener != null) {
                 downloadListener.onError("已经下载过了，请查看下载目录");
@@ -101,7 +100,7 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
             return;
         }
         //如果已经缓存完成，直接使用缓存代理完成
-        if (proxy.isCached(videoResult.getVideoUrl())) {
+        if (dataManager.isVideoCacheByProxy(videoResult.getVideoUrl())) {
             try {
                 copyCacheFile(videoCacheDir, tmp, downloadListener);
             } catch (IOException e) {
@@ -134,7 +133,7 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
             return;
         }
         Logger.d("视频连接：" + videoResult.getVideoUrl());
-        String path = v9PornItem.getDownLoadPath(dataManager);
+        String path = v9PornItem.getDownLoadPath(getCustomDownloadVideoDirPath());
         Logger.d(path);
         boolean isDownloadNeedWifi = dataManager.isDownloadVideoNeedWifi();
         int id = DownloadManager.getImpl().startDownload(videoResult.getVideoUrl(), path, isDownloadNeedWifi, isForceReDownload);
@@ -232,7 +231,7 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
 
     @Override
     public void deleteDownloadingTask(V9PornItem v9PornItem) {
-        FileDownloader.getImpl().clear(v9PornItem.getDownloadId(), v9PornItem.getDownLoadPath(dataManager));
+        FileDownloader.getImpl().clear(v9PornItem.getDownloadId(), v9PornItem.getDownLoadPath(getCustomDownloadVideoDirPath()));
         v9PornItem.setDownloadId(0);
         dataManager.updateV9PornItem(v9PornItem);
     }
@@ -251,10 +250,25 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
         return dataManager.findV9PornItemByDownloadId(downloadId);
     }
 
+    @Override
+    public List<V9PornItem> loadDownloadingDatas() {
+        return dataManager.loadDownloadingData();
+    }
+
+    @Override
+    public void updateV9PornItem(V9PornItem v9PornItem) {
+        dataManager.updateV9PornItem(v9PornItem);
+    }
+
+    @Override
+    public String getCustomDownloadVideoDirPath() {
+        return dataManager.getCustomDownloadVideoDirPath();
+    }
+
     /**
      * 只删除记录，不删除文件
      *
-     * @param v9PornItem
+     * @param v9PornItem v
      */
     private void deleteWithoutFile(V9PornItem v9PornItem) {
         v9PornItem.setDownloadId(0);
@@ -264,10 +278,10 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
     /**
      * 连同文件一起删除
      *
-     * @param v9PornItem
+     * @param v9PornItem v
      */
     private void deleteWithFile(V9PornItem v9PornItem) {
-        File file = new File(v9PornItem.getDownLoadPath(dataManager));
+        File file = new File(v9PornItem.getDownLoadPath(getCustomDownloadVideoDirPath()));
         if (file.delete()) {
             v9PornItem.setDownloadId(0);
             dataManager.updateV9PornItem(v9PornItem);
@@ -285,7 +299,7 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
     /**
      * 直接拷贝缓存好的视频即可
      *
-     * @param v9PornItem
+     * @param v9PornItem v
      */
     private void copyCacheFile(final File videoCacheDir, final V9PornItem v9PornItem, final DownloadListener downloadListener) throws IOException {
         Observable.create(new ObservableOnSubscribe<File>() {
@@ -303,7 +317,7 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
         }).map(new Function<File, V9PornItem>() {
             @Override
             public V9PornItem apply(File fromFile) throws Exception {
-                File toFile = new File(v9PornItem.getDownLoadPath(dataManager));
+                File toFile = new File(v9PornItem.getDownLoadPath(getCustomDownloadVideoDirPath()));
                 if (toFile.exists() && toFile.length() > 0) {
                     throw new Exception("已经下载过了");
                 } else {
@@ -322,7 +336,7 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
                 v9PornItem.setStatus(FileDownloadStatus.completed);
                 v9PornItem.setProgress(100);
                 v9PornItem.setFinishedDownloadDate(new Date());
-                v9PornItem.setDownloadId(FileDownloadUtils.generateId(v9PornItem.getVideoResult().getVideoUrl(), v9PornItem.getDownLoadPath(dataManager)));
+                v9PornItem.setDownloadId(FileDownloadUtils.generateId(v9PornItem.getVideoResult().getVideoUrl(), v9PornItem.getDownLoadPath(getCustomDownloadVideoDirPath())));
                 dataManager.updateV9PornItem(v9PornItem);
                 return "下载完成";
             }

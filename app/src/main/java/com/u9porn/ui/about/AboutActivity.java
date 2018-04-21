@@ -22,7 +22,6 @@ import com.u9porn.R;
 import com.u9porn.data.model.UpdateVersion;
 import com.u9porn.service.UpdateDownloadService;
 import com.u9porn.ui.MvpActivity;
-import com.u9porn.ui.update.UpdatePresenter;
 import com.u9porn.utils.ApkVersionUtils;
 import com.u9porn.utils.AppCacheUtils;
 import com.u9porn.utils.DialogUtils;
@@ -60,9 +59,6 @@ public class AboutActivity extends MvpActivity<AboutView, AboutPresenter> implem
     private QMUICommonListItemView cleanCacheQMUICommonListItemView;
 
     @Inject
-    protected UpdatePresenter updatePresenter;
-
-    @Inject
     protected AboutPresenter aboutPresenter;
 
     @SuppressLint("SetTextI18n")
@@ -83,7 +79,7 @@ public class AboutActivity extends MvpActivity<AboutView, AboutPresenter> implem
         mCopyrightTextView.setText(String.format(getResources().getString(R.string.about_copyright), currentYear));
 
         alertDialog = DialogUtils.initLoadingDialog(this, "正在检查更新，请稍后...");
-        presenter.countCacheFileSize(this, getString(R.string.about_item_clean_cache));
+        presenter.countCacheFileSize(getString(R.string.about_item_clean_cache));
     }
 
     private void initAboutSection() {
@@ -98,7 +94,7 @@ public class AboutActivity extends MvpActivity<AboutView, AboutPresenter> implem
                 .addItemView(mAboutGroupListView.createItemView(getResources().getString(R.string.about_item_github)), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String url = "https://github.com/techGay/91porn";
+                        String url = "https://github.com/techGay/v9porn";
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
                         startActivity(intent);
@@ -107,7 +103,7 @@ public class AboutActivity extends MvpActivity<AboutView, AboutPresenter> implem
                 .addItemView(mAboutGroupListView.createItemView(getResources().getString(R.string.about_item_homepage)), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String url = "https://github.com/techGay/91porn/issues";
+                        String url = "https://github.com/techGay/v9porn/issues";
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(url));
                         startActivity(intent);
@@ -187,7 +183,7 @@ public class AboutActivity extends MvpActivity<AboutView, AboutPresenter> implem
             showMessage("未选择任何条目，无法清除缓存", TastyToast.INFO);
             return;
         }
-        presenter.cleanCacheFile(fileDirList, getApplicationContext());
+        presenter.cleanCacheFile(fileDirList);
     }
 
     private String getCleanCacheTitle() {

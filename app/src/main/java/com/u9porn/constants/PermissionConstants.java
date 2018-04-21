@@ -1,4 +1,4 @@
-package com.u9porn.utils.constants;
+package com.u9porn.constants;
 
 import android.Manifest;
 import android.Manifest.permission;

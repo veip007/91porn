@@ -1,4 +1,4 @@
-package com.u9porn.utils.constants;
+package com.u9porn.constants;
 
 /**
  * 常量

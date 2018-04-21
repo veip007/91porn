@@ -8,4 +8,6 @@ package com.u9porn.ui.porn9video.index;
 
 public interface IIndex {
     void loadIndexData(final boolean pullToRefresh, boolean cleanCache);
+
+    int getPlayBackEngine();
 }

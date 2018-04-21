@@ -1,4 +1,4 @@
-package com.u9porn.ui.favorite;
+package com.u9porn.ui.porn9video.favorite;
 
 import android.arch.lifecycle.Lifecycle;
 import android.support.annotation.NonNull;
@@ -43,7 +43,6 @@ import io.reactivex.schedulers.Schedulers;
 public class FavoritePresenter extends MvpBasePresenter<FavoriteView> implements IFavorite {
     private static final String TAG = FavoriteListener.class.getSimpleName();
 
-    private User user;
     private Integer totalPage = 1;
     private int page = 1;
     private LifecycleProvider<Lifecycle.Event> provider;
@@ -55,9 +54,8 @@ public class FavoritePresenter extends MvpBasePresenter<FavoriteView> implements
     private DataManager dataManager;
 
     @Inject
-    public FavoritePresenter(DataManager dataManager, User user, LifecycleProvider<Lifecycle.Event> provider) {
+    public FavoritePresenter(DataManager dataManager, LifecycleProvider<Lifecycle.Event> provider) {
         this.dataManager = dataManager;
-        this.user = user;
         this.provider = provider;
     }
 
@@ -133,6 +131,7 @@ public class FavoritePresenter extends MvpBasePresenter<FavoriteView> implements
         }
         //RxCache条件区别
         String condition = null;
+        final User user = dataManager.getUser();
         if (user != null) {
             condition = user.getUserName();
         }

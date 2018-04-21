@@ -25,7 +25,7 @@ import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.porn9forum.browse9forum.Browse9PForumActivity;
 import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.AppUtils;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class ForumFragment extends MvpFragment<ForumView, ForumPresenter> implem
     @BindView(R.id.tv_forum_91_porn_tip)
     TextView tipTextView;
     Unbinder unbinder;
-    private Forum9PornAdapter forun91PornAdapter;
+    private Forum9PornAdapter forum91PornAdapter;
 
     @Inject
     protected AddressHelper addressHelper;
@@ -71,7 +71,7 @@ public class ForumFragment extends MvpFragment<ForumView, ForumPresenter> implem
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         List<F9PronItem> f9PronItemList = new ArrayList<>();
-        forun91PornAdapter = new Forum9PornAdapter(context, addressHelper, R.layout.item_forum_9_porn, f9PronItemList);
+        forum91PornAdapter = new Forum9PornAdapter(context, addressHelper, R.layout.item_forum_9_porn, f9PronItemList);
     }
 
     @Override
@@ -97,8 +97,8 @@ public class ForumFragment extends MvpFragment<ForumView, ForumPresenter> implem
         AppUtils.setColorSchemeColors(context, swipeLayout);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
-        recyclerView.setAdapter(forun91PornAdapter);
-        forun91PornAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
+        recyclerView.setAdapter(forum91PornAdapter);
+        forum91PornAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override
             public void onLoadMoreRequested() {
                 loadData(false);
@@ -108,13 +108,13 @@ public class ForumFragment extends MvpFragment<ForumView, ForumPresenter> implem
             tipTextView.setVisibility(View.VISIBLE);
             swipeLayout.setEnabled(false);
         }
-        forun91PornAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        forum91PornAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 F9PronItem f9PronItem = (F9PronItem) adapter.getItem(position);
                 Intent intent = new Intent(context, Browse9PForumActivity.class);
                 intent.putExtra(Keys.KEY_INTENT_BROWSE_FORUM_9PORN_ITEM, f9PronItem);
-                startActivityWithAnimotion(intent);
+                startActivityWithAnimation(intent);
             }
         });
     }
@@ -159,7 +159,7 @@ public class ForumFragment extends MvpFragment<ForumView, ForumPresenter> implem
 
     @Override
     public void setForumListData(List<F9PronItem> f9PronItemList) {
-        forun91PornAdapter.setNewData(f9PronItemList);
+        forum91PornAdapter.setNewData(f9PronItemList);
     }
 
     @Override
@@ -169,18 +169,18 @@ public class ForumFragment extends MvpFragment<ForumView, ForumPresenter> implem
 
     @Override
     public void loadMoreFailed() {
-        forun91PornAdapter.loadMoreFail();
+        forum91PornAdapter.loadMoreFail();
     }
 
     @Override
     public void noMoreData() {
-        forun91PornAdapter.loadMoreEnd(true);
+        forum91PornAdapter.loadMoreEnd(true);
     }
 
     @Override
     public void setMoreData(List<F9PronItem> f9PronItemList) {
-        forun91PornAdapter.loadMoreComplete();
-        forun91PornAdapter.addData(f9PronItemList);
+        forum91PornAdapter.loadMoreComplete();
+        forum91PornAdapter.addData(f9PronItemList);
     }
 
     @Override

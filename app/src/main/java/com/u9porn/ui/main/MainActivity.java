@@ -43,14 +43,13 @@ import com.u9porn.ui.porn9forum.Main9ForumFragment;
 import com.u9porn.ui.porn9video.Main9PronVideoFragment;
 import com.u9porn.ui.porn9video.search.SearchActivity;
 import com.u9porn.ui.setting.SettingActivity;
-import com.u9porn.ui.user.UserLoginActivity;
+import com.u9porn.ui.porn9video.user.UserLoginActivity;
 import com.u9porn.utils.ApkVersionUtils;
 import com.u9porn.utils.FragmentUtils;
 import com.u9porn.utils.SDCardUtils;
-import com.u9porn.utils.UserHelper;
-import com.u9porn.utils.constants.Constants;
-import com.u9porn.utils.constants.Keys;
-import com.u9porn.utils.constants.PermissionConstants;
+import com.u9porn.constants.Constants;
+import com.u9porn.constants.Keys;
+import com.u9porn.constants.PermissionConstants;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.yanzhenjie.permission.Rationale;
@@ -177,7 +176,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                                 break;
                             case 1:
                                 Intent intent = new Intent(context, DownloadActivity.class);
-                                startActivityWithAnimotion(intent);
+                                startActivityWithAnimation(intent);
                                 break;
                             default:
                                 handlerFirstTabClickToShow(position, selectIndex, true);
@@ -334,7 +333,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             public void onClick(QMUIDialog dialog, int index) {
                 dialog.dismiss();
                 Intent intent = new Intent(context, SettingActivity.class);
-                startActivityWithAnimotion(intent);
+                startActivityWithAnimation(intent);
             }
         });
         builder.addAction("返回", new QMUIDialogAction.ActionListener() {
@@ -523,11 +522,11 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             showMessage("请先登录", TastyToast.INFO);
             Intent intent = new Intent(MainActivity.this, UserLoginActivity.class);
             intent.putExtra(Keys.KEY_INTENT_LOGIN_FOR_ACTION, UserLoginActivity.LOGIN_ACTION_FOR_SEARCH_91PRON_VIDEO);
-            startActivityForResultWithAnimotion(intent, Constants.USER_LOGIN_REQUEST_CODE);
+            startActivityForResultWithAnimation(intent, Constants.USER_LOGIN_REQUEST_CODE);
             return;
         }
         Intent intent = new Intent(this, SearchActivity.class);
-        startActivityWithAnimotion(intent);
+        startActivityWithAnimation(intent);
     }
 
     private void showUpdateDialog(final UpdateVersion updateVersion) {

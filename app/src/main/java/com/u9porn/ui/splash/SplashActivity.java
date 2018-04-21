@@ -11,7 +11,7 @@ import com.u9porn.data.DataManager;
 import com.u9porn.data.model.User;
 import com.u9porn.ui.MvpActivity;
 import com.u9porn.ui.main.MainActivity;
-import com.u9porn.ui.user.UserPresenter;
+import com.u9porn.ui.porn9video.user.UserPresenter;
 import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.UserHelper;
 
@@ -28,13 +28,7 @@ public class SplashActivity extends MvpActivity<SplashView, SplashPresenter> imp
     protected AddressHelper addressHelper;
 
     @Inject
-    protected UserPresenter userPresenter;
-
-    @Inject
     protected SplashPresenter splashPresenter;
-
-    @Inject
-    protected DataManager dataManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +47,10 @@ public class SplashActivity extends MvpActivity<SplashView, SplashPresenter> imp
             startMain();
         }
         setContentView(R.layout.activity_splash);
-        String username = dataManager.getPorn9VideoLoginUserName();
-        String password = dataManager.getPorn9VideoLoginUserPassword();
+        String username = presenter.getPorn9VideoLoginUserName();
+        String password = presenter.getPorn9VideoLoginUserPassword();
 
-        boolean isAutoLogin = dataManager.isPorn9VideoUserAutoLogin();
+        boolean isAutoLogin = presenter.isPorn9VideoUserAutoLogin();
 
         if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password) && isAutoLogin && !TextUtils.isEmpty(addressHelper.getVideo9PornAddress())) {
             String captcha = UserHelper.randomCaptcha();

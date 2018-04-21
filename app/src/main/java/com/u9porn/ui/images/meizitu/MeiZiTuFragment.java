@@ -23,7 +23,7 @@ import com.u9porn.data.model.MeiZiTu;
 import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.images.viewimage.PictureViewerActivity;
 import com.u9porn.utils.AppUtils;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +107,7 @@ public class MeiZiTuFragment extends MvpFragment<MeiZiTuView, MeiZiTuPresenter> 
                 }
                 Intent intent = new Intent(context, PictureViewerActivity.class);
                 intent.putExtra(Keys.KEY_INTENT_MEI_ZI_TU_CONTENT_ID, meiZiTu.getId());
-                startActivityWithAnimotion(intent);
+                startActivityWithAnimation(intent);
             }
         });
     }

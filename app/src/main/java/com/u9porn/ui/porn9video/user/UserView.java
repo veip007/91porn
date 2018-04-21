@@ -1,4 +1,4 @@
-package com.u9porn.ui.user;
+package com.u9porn.ui.porn9video.user;
 
 import com.u9porn.data.model.User;
 import com.u9porn.ui.BaseView;

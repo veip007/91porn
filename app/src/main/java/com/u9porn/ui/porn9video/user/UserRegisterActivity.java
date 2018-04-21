@@ -1,4 +1,4 @@
-package com.u9porn.ui.user;
+package com.u9porn.ui.porn9video.user;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -18,8 +18,6 @@ import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.util.QMUIKeyboardHelper;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
-import com.u9porn.cookie.CookieManager;
-import com.u9porn.data.DataManager;
 import com.u9porn.data.model.User;
 import com.u9porn.ui.MvpActivity;
 import com.u9porn.ui.main.MainActivity;
@@ -52,7 +50,7 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
     @BindView(R.id.wb_captcha)
     ImageView wbCaptcha;
     @BindView(R.id.bt_user_signup)
-    Button btUserSignup;
+    Button btUserSignUp;
 
     private AlertDialog alertDialog;
     private String username;
@@ -64,12 +62,6 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
     @Inject
     protected UserPresenter userPresenter;
 
-    @Inject
-    protected CookieManager cookieManager;
-
-    @Inject
-    protected DataManager dataManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +70,7 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
         initToolBar(toolbar);
         loadCaptcha();
 
-        btUserSignup.setOnClickListener(new View.OnClickListener() {
+        btUserSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 username = etAccount.getText().toString().trim();
@@ -98,7 +90,7 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
         });
         alertDialog = DialogUtils.initLoadingDialog(this, "注册中，请稍后...");
 
-        cookieManager.cleanAllCookies();
+        presenter.existLogin();
     }
 
     /**
@@ -108,7 +100,7 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivityWithAnimotion(intent);
+        startActivityWithAnimation(intent);
         finish();
     }
 
@@ -171,18 +163,9 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
 
     @Override
     public void registerSuccess(User user) {
-        saveUserInfoPrf(username, password);
+        presenter.saveUserInfoPrf(username, password);
         startMain();
         showMessage("注册成功", TastyToast.SUCCESS);
-    }
-
-    /**
-     * 注册成功，默认保存用户名和密码
-     */
-    private void saveUserInfoPrf(String username, String password) {
-        dataManager.setPorn9VideoLoginUserName(username);
-        //记住密码
-        dataManager.setPorn9VideoLoginUserPassWord(password);
     }
 
     @Override

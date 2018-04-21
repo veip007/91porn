@@ -25,7 +25,6 @@ import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
 import com.u9porn.adapter.DownloadVideoAdapter;
-import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.service.DownloadVideoService;
 import com.u9porn.ui.MvpFragment;
@@ -54,13 +53,10 @@ public class FinishedFragment extends MvpFragment<DownloadView, DownloadPresente
     Unbinder unbinder;
 
     private DownloadVideoAdapter mDownloadAdapter;
-    private boolean isFoucesRefresh = false;
+    private boolean isFocusRefresh = false;
 
     @Inject
     protected DownloadPresenter downloadPresenter;
-
-    @Inject
-    protected DataManager dataManager;
 
     @Inject
     public FinishedFragment() {
@@ -95,6 +91,9 @@ public class FinishedFragment extends MvpFragment<DownloadView, DownloadPresente
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 V9PornItem v9PornItem = (V9PornItem) adapter.getItem(position);
+                if (v9PornItem == null) {
+                    return;
+                }
                 openMp4File(v9PornItem);
             }
         });
@@ -105,7 +104,7 @@ public class FinishedFragment extends MvpFragment<DownloadView, DownloadPresente
                 if (view.getId() == R.id.right_menu_delete && v9PornItem != null) {
                     SwipeItemLayout swipeItemLayout = (SwipeItemLayout) view.getParent();
                     swipeItemLayout.close();
-                    File file = new File(v9PornItem.getDownLoadPath(dataManager));
+                    File file = new File(v9PornItem.getDownLoadPath(presenter.getCustomDownloadVideoDirPath()));
                     if (file.exists()) {
                         showDeleteFileDialog(v9PornItem);
                     } else {
@@ -145,7 +144,7 @@ public class FinishedFragment extends MvpFragment<DownloadView, DownloadPresente
      * @param v9PornItem item
      */
     private void openMp4File(V9PornItem v9PornItem) {
-        File file = new File(v9PornItem.getDownLoadPath(dataManager));
+        File file = new File(v9PornItem.getDownLoadPath(presenter.getCustomDownloadVideoDirPath()));
         if (file.exists()) {
             Uri uri;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -180,12 +179,11 @@ public class FinishedFragment extends MvpFragment<DownloadView, DownloadPresente
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                boolean isDownloadNeedWifi = dataManager.isDownloadVideoNeedWifi();
                 v9PornItem.setDownloadId(0);
                 v9PornItem.setSoFarBytes(0);
-                dataManager.updateV9PornItem(v9PornItem);
+                presenter.updateV9PornItem(v9PornItem);
                 presenter.downloadVideo(v9PornItem, true);
-                isFoucesRefresh = true;
+                isFocusRefresh = true;
                 Intent intent = new Intent(getContext(), DownloadVideoService.class);
                 context.startService(intent);
             }
@@ -226,8 +224,8 @@ public class FinishedFragment extends MvpFragment<DownloadView, DownloadPresente
 
     @Override
     public void update(BaseDownloadTask task) {
-        if (isFoucesRefresh) {
-            isFoucesRefresh = false;
+        if (isFocusRefresh) {
+            isFocusRefresh = false;
             presenter.loadFinishedData();
         }
     }

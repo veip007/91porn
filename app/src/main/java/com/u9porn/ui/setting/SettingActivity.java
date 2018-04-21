@@ -20,16 +20,15 @@ import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView;
 import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
-import com.u9porn.data.DataManager;
 import com.u9porn.data.network.Api;
 import com.u9porn.data.prefs.AppPreferencesHelper;
 import com.u9porn.ui.MvpActivity;
-import com.u9porn.ui.user.UserLoginActivity;
+import com.u9porn.ui.porn9video.user.UserLoginActivity;
 import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.DialogUtils;
 import com.u9porn.utils.PlaybackEngine;
 import com.u9porn.utils.SDCardUtils;
-import com.u9porn.utils.constants.Constants;
+import com.u9porn.constants.Constants;
 
 import java.util.List;
 
@@ -498,7 +497,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
             public void onClick(DialogInterface dialog, int which) {
                 presenter.existLogin();
                 Intent intent = new Intent(SettingActivity.this, UserLoginActivity.class);
-                startActivityForResultWithAnimotion(intent, Constants.USER_LOGIN_REQUEST_CODE);
+                startActivityForResultWithAnimation(intent, Constants.USER_LOGIN_REQUEST_CODE);
                 finish();
             }
         });

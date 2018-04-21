@@ -55,6 +55,12 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
     @BindView(R.id.recyclerView_skip_page)
     RecyclerView skipPageRecyclerView;
 
+    @BindView(R.id.ll_skip_page_loading)
+    LinearLayout skipLoadingLayout;
+
+    @BindView(R.id.fl_skip_page)
+    FrameLayout skipPageLayout;
+
     private V91PornAdapter mV91PornAdapter;
 
     private LoadViewHelper helper;
@@ -64,11 +70,6 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
 
     private SkipPageAdapter skipPageAdapter;
 
-    @BindView(R.id.ll_skip_page_loading)
-    LinearLayout skipLoadingLayout;
-
-    @BindView(R.id.fl_skip_page)
-    FrameLayout skipPageLayout;
 
     public VideoListFragment() {
         // Required empty public constructor
@@ -113,7 +114,7 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 V9PornItem v9PornItems = (V9PornItem) adapter.getItem(position);
-                goToPlayVideo(v9PornItems);
+                goToPlayVideo(v9PornItems, presenter.getPlayBackEngine());
             }
         });
         //使用缓存的FragmentPagerAdapter之后会导致新方法的加载更多失效，暂时切换回过时api，可正常运行
@@ -137,7 +138,7 @@ public class VideoListFragment extends MvpFragment<VideoListView, VideoListPrese
     }
 
     private void handlerSkipPage() {
-        if (dataManager.isOpenSkipPage()) {
+        if (presenter.isOpenSkipPage()) {
             skipPageLayout.setVisibility(View.VISIBLE);
             skipPageRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
             skipPageRecyclerView.setAdapter(skipPageAdapter);

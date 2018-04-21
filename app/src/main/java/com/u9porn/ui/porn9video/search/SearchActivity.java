@@ -76,10 +76,10 @@ public class SearchActivity extends MvpActivity<SearchView, SearchPresenter> imp
         searchView.setQueryHint("搜索视频");
         searchView.onActionViewExpanded();
 
-        List<String> datasetSortBy = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.sort_by)));
-        niceSpinnerSortBy.attachDataSource(datasetSortBy);
-        List<String> datasetSearch = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.search)));
-        niceSpinnerSearch.attachDataSource(datasetSearch);
+        List<String> dataSetSortBy = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.sort_by)));
+        niceSpinnerSortBy.attachDataSource(dataSetSortBy);
+        List<String> dataSetSearch = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.search)));
+        niceSpinnerSearch.attachDataSource(dataSetSearch);
 
         List<V9PornItem> mV9PornItemList = new ArrayList<>();
         mV91PornAdapter = new V91PornAdapter(R.layout.item_v_9porn, mV9PornItemList);

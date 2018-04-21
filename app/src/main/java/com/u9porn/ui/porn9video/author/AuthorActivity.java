@@ -19,7 +19,7 @@ import com.u9porn.adapter.V91PornAdapter;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.ui.MvpActivity;
 import com.u9porn.utils.LoadHelperUtils;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import java.util.ArrayList;
 import java.util.List;

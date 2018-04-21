@@ -16,4 +16,8 @@ public interface IVideoList {
      * @param skipPage      跳页 0为正常
      */
     void loadVideoListData(boolean pullToRefresh, boolean cleanCache, String category, int skipPage);
+
+    int getPlayBackEngine();
+
+    boolean isOpenSkipPage();
 }

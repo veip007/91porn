@@ -1,4 +1,4 @@
-package com.u9porn.ui.favorite;
+package com.u9porn.ui.porn9video.favorite;
 
 /**
  * @author flymegoc

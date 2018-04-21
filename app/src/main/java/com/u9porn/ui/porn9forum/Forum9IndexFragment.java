@@ -25,7 +25,7 @@ import com.u9porn.data.model.PinnedHeaderEntity;
 import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.porn9forum.browse9forum.Browse9PForumActivity;
 import com.u9porn.utils.AppUtils;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +90,7 @@ public class Forum9IndexFragment extends MvpFragment<ForumView, ForumPresenter> 
                 }
                 Intent intent = new Intent(context, Browse9PForumActivity.class);
                 intent.putExtra(Keys.KEY_INTENT_BROWSE_FORUM_9PORN_ITEM, forum91PronItemPinnedHeaderEntity.getData());
-                startActivityWithAnimotion(intent);
+                startActivityWithAnimation(intent);
             }
         });
     }

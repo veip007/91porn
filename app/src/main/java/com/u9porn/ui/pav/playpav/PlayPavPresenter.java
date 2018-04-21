@@ -25,13 +25,10 @@ public class PlayPavPresenter extends MvpBasePresenter<PlayPavView> implements I
 
     private DataManager dataManager;
 
-    private HttpProxyCacheServer httpProxyCacheServer;
-
     @Inject
-    public PlayPavPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, HttpProxyCacheServer httpProxyCacheServer) {
+    public PlayPavPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
         super(provider);
         this.dataManager = dataManager;
-        this.httpProxyCacheServer = httpProxyCacheServer;
     }
 
     @Override

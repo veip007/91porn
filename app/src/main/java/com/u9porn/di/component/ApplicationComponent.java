@@ -2,7 +2,6 @@ package com.u9porn.di.component;
 
 import android.content.Context;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.google.gson.Gson;
 import com.u9porn.MyApplication;
 import com.u9porn.cookie.CookieManager;
@@ -13,7 +12,6 @@ import com.u9porn.di.module.ApiServiceModule;
 import com.u9porn.di.module.ApplicationModule;
 import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.DownloadManager;
-import com.u9porn.utils.MyProxySelector;
 
 import javax.inject.Singleton;
 
@@ -33,15 +31,7 @@ public interface ApplicationComponent {
     @ApplicationContext
     Context getContext();
 
-    HttpProxyCacheServer getHttpProxyCacheServer();
-
-    User getUser();
-
     AddressHelper getAddressHelper();
 
-    Gson getGson();
-
     DataManager getDataManager();
-
-    CookieManager getCookieManager();
 }

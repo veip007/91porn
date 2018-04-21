@@ -1,4 +1,6 @@
-package com.u9porn.utils;
+package com.u9porn.data.network.okhttp;
+
+import com.u9porn.utils.AddressHelper;
 
 /**
  * 给每个请求添加对应的referer header，一定程度上能改善超时现象

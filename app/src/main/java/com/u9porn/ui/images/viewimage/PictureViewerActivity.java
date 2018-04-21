@@ -28,7 +28,7 @@ import com.u9porn.ui.MvpActivity;
 import com.u9porn.utils.DialogUtils;
 import com.u9porn.utils.GlideApp;
 import com.u9porn.utils.SDCardUtils;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 import com.u9porn.widget.ProblematicViewPager;
 
 import java.io.File;

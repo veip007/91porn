@@ -1,7 +1,5 @@
 package com.u9porn.ui.about;
 
-import android.content.Context;
-
 import java.io.File;
 import java.util.List;
 
@@ -17,7 +15,7 @@ public interface IAbout extends IBaseAbout {
      *
      * @param fileDirList 缓存目录集
      */
-    void cleanCacheFile(List<File> fileDirList, Context context);
+    void cleanCacheFile(List<File> fileDirList);
 
-    void countCacheFileSize(Context context, String title);
+    void countCacheFileSize(String title);
 }

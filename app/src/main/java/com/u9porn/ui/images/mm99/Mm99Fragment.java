@@ -22,7 +22,7 @@ import com.u9porn.data.model.Mm99;
 import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.images.viewimage.PictureViewerActivity;
 import com.u9porn.utils.AppUtils;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import java.util.List;
 
@@ -109,7 +109,7 @@ public class Mm99Fragment extends MvpFragment<Mm99View, Mm99Presenter> implement
                 }
                 Intent intent = new Intent(context, PictureViewerActivity.class);
                 intent.putExtra(Keys.KEY_INTENT_99_MM_ITEM, mm99);
-                startActivityWithAnimotion(intent);
+                startActivityWithAnimation(intent);
             }
         });
     }

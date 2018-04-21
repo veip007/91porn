@@ -22,7 +22,7 @@ import com.u9porn.data.model.PavModel;
 import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.pav.playpav.PlayPavActivity;
 import com.u9porn.utils.AppUtils;
-import com.u9porn.utils.constants.Keys;
+import com.u9porn.constants.Keys;
 
 import java.util.List;
 
@@ -94,7 +94,7 @@ public class PavFragment extends MvpFragment<PavView, PavPresenter> implements P
                 }
                 Intent intent = new Intent(context, PlayPavActivity.class);
                 intent.putExtra(Keys.KEY_INTENT_PAV_ITEM, pavModel);
-                startActivityWithAnimotion(intent);
+                startActivityWithAnimation(intent);
             }
         });
         piaAvAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {

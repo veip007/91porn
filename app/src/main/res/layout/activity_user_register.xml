@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/common_background"
-    tools:context="com.u9porn.ui.user.UserLoginActivity">
+    tools:context="com.u9porn.ui.porn9video.user.UserLoginActivity">
 
     <include layout="@layout/layout_toolbar" />
 

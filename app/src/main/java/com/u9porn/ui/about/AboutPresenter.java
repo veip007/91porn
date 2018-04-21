@@ -8,6 +8,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpBasePresenter;
 import com.orhanobut.logger.Logger;
 import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.model.UpdateVersion;
+import com.u9porn.di.ApplicationContext;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.ui.update.UpdatePresenter;
 import com.u9porn.utils.AppCacheUtils;
@@ -15,6 +16,7 @@ import com.u9porn.utils.GlideApp;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -34,11 +36,13 @@ import io.reactivex.schedulers.Schedulers;
 public class AboutPresenter extends MvpBasePresenter<AboutView> implements IAbout {
     private UpdatePresenter updatePresenter;
     private LifecycleProvider<Lifecycle.Event> provider;
+    private Context context;
 
     @Inject
-    public AboutPresenter(UpdatePresenter updatePresenter, LifecycleProvider<Lifecycle.Event> provider) {
+    public AboutPresenter(UpdatePresenter updatePresenter, LifecycleProvider<Lifecycle.Event> provider, @ApplicationContext Context context) {
         this.updatePresenter = updatePresenter;
         this.provider = provider;
+        this.context = context;
     }
 
     @Override
@@ -81,7 +85,7 @@ public class AboutPresenter extends MvpBasePresenter<AboutView> implements IAbou
 
 
     @Override
-    public void cleanCacheFile(final List<File> fileDirList, final Context context) {
+    public void cleanCacheFile(final List<File> fileDirList) {
         Observable.create(new ObservableOnSubscribe<Boolean>() {
             @Override
             public void subscribe(ObservableEmitter<Boolean> emitter) throws Exception {
@@ -143,15 +147,13 @@ public class AboutPresenter extends MvpBasePresenter<AboutView> implements IAbou
     }
 
     @Override
-    public void countCacheFileSize(final Context context, final String title) {
-        Observable.create(new ObservableOnSubscribe<String>() {
+    public void countCacheFileSize(final String title) {
+        Observable.fromCallable(new Callable<String>() {
             @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                emitter.onNext(getCleanCacheTitle(context, title));
-                emitter.onComplete();
+            public String call() throws Exception {
+                return getCleanCacheTitle(context, title);
             }
-        })
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .delay(500, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(provider.<String>bindUntilEvent(Lifecycle.Event.ON_DESTROY))
