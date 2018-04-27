@@ -98,7 +98,12 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
                         ifViewAttached(new ViewAction<PlayVideoView>() {
                             @Override
                             public void run(@NonNull PlayVideoView view) {
-                                view.parseVideoUrlSuccess(saveVideoUrl(videoResult, v9PornItem));
+                                if (v9PornItem.getVideoResultId() == 0) {
+                                    view.parseVideoUrlSuccess(saveVideoUrl(videoResult, v9PornItem));
+                                } else {
+                                    Logger.t(TAG).d("此次解析仅为了uid，无需重新保存");
+                                    view.parseVideoUrlSuccess(v9PornItem);
+                                }
                             }
                         });
                     }
@@ -363,5 +368,16 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
                 });
             }
         });
+    }
+
+
+    /**
+     * 是否需要为了解析uid，只有登录状态下且uid还未解析过才需要解析
+     *
+     * @return true
+     */
+    public boolean isLoadForUid() {
+        User user = dataManager.getUser();
+        return dataManager.isUserLogin() && user.getUserId() == 0;
     }
 }

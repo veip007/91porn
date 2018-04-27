@@ -27,6 +27,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.BuildConfig;
 import com.u9porn.R;
+import com.u9porn.constants.KeysActivityRequestResultCode;
 import com.u9porn.data.model.Notice;
 import com.u9porn.data.model.UpdateVersion;
 import com.u9porn.eventbus.LowMemoryEvent;
@@ -521,7 +522,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         if (!presenter.isUserLogin()) {
             showMessage("请先登录", TastyToast.INFO);
             Intent intent = new Intent(MainActivity.this, UserLoginActivity.class);
-            intent.putExtra(Keys.KEY_INTENT_LOGIN_FOR_ACTION, UserLoginActivity.LOGIN_ACTION_FOR_SEARCH_91PRON_VIDEO);
+            intent.putExtra(Keys.KEY_INTENT_LOGIN_FOR_ACTION, KeysActivityRequestResultCode.LOGIN_ACTION_FOR_SEARCH_91PRON_VIDEO);
             startActivityForResultWithAnimation(intent, Constants.USER_LOGIN_REQUEST_CODE);
             return;
         }

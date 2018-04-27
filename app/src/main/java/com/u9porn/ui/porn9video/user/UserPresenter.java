@@ -172,6 +172,11 @@ public class UserPresenter extends MvpBasePresenter<UserView> implements IUser {
     }
 
     @Override
+    public String getVideo9PornAddress() {
+        return dataManager.getPorn9VideoAddress();
+    }
+
+    @Override
     public void existLogin() {
         dataManager.existLogin();
     }

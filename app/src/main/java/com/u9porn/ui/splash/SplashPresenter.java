@@ -71,4 +71,9 @@ public class SplashPresenter extends MvpBasePresenter<SplashView> implements ISp
     public boolean isPorn9VideoUserAutoLogin() {
         return dataManager.isPorn9VideoUserAutoLogin();
     }
+
+    @Override
+    public String getVideo9PornAddress() {
+        return dataManager.getPorn9VideoAddress();
+    }
 }

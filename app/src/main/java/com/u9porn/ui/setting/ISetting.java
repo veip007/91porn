@@ -50,4 +50,10 @@ public interface ISetting {
     boolean isOpenSkipPage();
 
     void setOpenSkipPage(boolean openSkipPage);
+
+    String getVideo9PornAddress();
+
+    String getForum9PornAddress();
+
+    String getPavAddress();
 }

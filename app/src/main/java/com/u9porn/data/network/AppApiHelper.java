@@ -216,27 +216,8 @@ public class AppApiHelper implements ApiHelper {
     @Override
     public Observable<VideoResult> loadPorn9VideoUrl(String viewKey) {
         String ip = addressHelper.getRandomIPAddress();
-        Observable<String> stringObservable = v9PornServiceApi.getVideoPlayPage(viewKey, ip, HeaderUtils.getIndexHeader(addressHelper));
-        return cacheProviders.getVideoPlayPage(stringObservable, new DynamicKey(viewKey), new EvictDynamicKey(false))
-                .map(new Function<Reply<String>, String>() {
-                    @Override
-                    public String apply(Reply<String> responseBodyReply) throws Exception {
-                        switch (responseBodyReply.getSource()) {
-                            case CLOUD:
-                                Logger.t(TAG).d("数据来自：网络");
-                                break;
-                            case MEMORY:
-                                Logger.t(TAG).d("数据来自：内存");
-                                break;
-                            case PERSISTENCE:
-                                Logger.t(TAG).d("数据来自：磁盘缓存");
-                                break;
-                            default:
-                                break;
-                        }
-                        return responseBodyReply.getData();
-                    }
-                })
+        //因为登录后不在返回用户uid，需要在此页面获取，所以当前页面不在缓存，确保用户登录后刷新当前页面可以获取到用户uid
+        return v9PornServiceApi.getVideoPlayPage(viewKey, ip, HeaderUtils.getIndexHeader(addressHelper))
                 .map(new Function<String, VideoResult>() {
                     @Override
                     public VideoResult apply(String html) throws Exception {

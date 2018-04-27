@@ -14,4 +14,6 @@ public interface IUser extends IBaseUser {
     String getUserName();
     String getPassword();
     boolean isAutoLogin();
+
+    String getVideo9PornAddress();
 }

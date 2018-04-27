@@ -347,4 +347,19 @@ public class SettingPresenter extends MvpBasePresenter<SettingView> implements I
     public void setOpenSkipPage(boolean openSkipPage) {
         dataManager.setOpenSkipPage(openSkipPage);
     }
+
+    @Override
+    public String getVideo9PornAddress() {
+        return dataManager.getPorn9VideoAddress();
+    }
+
+    @Override
+    public String getForum9PornAddress() {
+        return dataManager.getPorn9ForumAddress();
+    }
+
+    @Override
+    public String getPavAddress() {
+        return dataManager.getPavAddress();
+    }
 }

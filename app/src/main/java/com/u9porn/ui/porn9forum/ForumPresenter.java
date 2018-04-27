@@ -142,4 +142,9 @@ public class ForumPresenter extends MvpBasePresenter<ForumView> implements IForu
                     }
                 });
     }
+
+    @Override
+    public String getForum9PornAddress() {
+        return dataManager.getPorn9ForumAddress();
+    }
 }

@@ -31,7 +31,5 @@ public interface ApplicationComponent {
     @ApplicationContext
     Context getContext();
 
-    AddressHelper getAddressHelper();
-
     DataManager getDataManager();
 }

@@ -21,7 +21,6 @@ import com.u9porn.R;
 import com.u9porn.data.model.User;
 import com.u9porn.ui.MvpActivity;
 import com.u9porn.ui.main.MainActivity;
-import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.DialogUtils;
 import com.u9porn.utils.GlideApp;
 
@@ -55,9 +54,6 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
     private AlertDialog alertDialog;
     private String username;
     private String password;
-
-    @Inject
-    protected AddressHelper addressHelper;
 
     @Inject
     protected UserPresenter userPresenter;
@@ -145,7 +141,7 @@ public class UserRegisterActivity extends MvpActivity<UserView, UserPresenter> i
      * 加载验证码，目前似乎是非必须，不填也是可以登录的
      */
     private void loadCaptcha() {
-        String url = addressHelper.getVideo9PornAddress() + "captcha2.php";
+        String url = presenter.getVideo9PornAddress() + "captcha2.php";
         Logger.t(TAG).d("验证码链接：" + url);
         Uri uri = Uri.parse(url);
         GlideApp.with(this).load(uri).placeholder(R.drawable.placeholder).transition(new DrawableTransitionOptions().crossFade(300)).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true).into(wbCaptcha);

@@ -57,9 +57,6 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
     @Inject
     SettingPresenter settingPresenter;
 
-    @Inject
-    protected AddressHelper addressHelper;
-
     private AlertDialog testAlertDialog;
     private AlertDialog moveOldDirDownloadVideoToNewDirDiaog;
     private boolean isTestSuccess = false;
@@ -103,7 +100,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         QMUICommonListItemView addressItemWithChevron = qmuiGroupListView.createItemView(getString(R.string.address_v9porn));
         addressItemWithChevron.setId(R.id.setting_item_9_porn_address);
         addressItemWithChevron.setOrientation(QMUICommonListItemView.VERTICAL);
-        String video91Address = addressHelper.getVideo9PornAddress();
+        String video91Address = presenter.getVideo9PornAddress();
         addressItemWithChevron.setDetailText(TextUtils.isEmpty(video91Address) ? "未设置" : video91Address);
         addressItemWithChevron.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
 
@@ -111,14 +108,14 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         QMUICommonListItemView forumAddressItemWithChevron = qmuiGroupListView.createItemView(getString(R.string.address_forum_9porn));
         forumAddressItemWithChevron.setId(R.id.setting_item_t6y_forum_address);
         forumAddressItemWithChevron.setOrientation(QMUICommonListItemView.VERTICAL);
-        String forum91Address = addressHelper.getForum9PornAddress();
+        String forum91Address = presenter.getForum9PornAddress();
         forumAddressItemWithChevron.setDetailText(TextUtils.isEmpty(forum91Address) ? "未设置" : forum91Address);
         forumAddressItemWithChevron.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
 
         //朱古力视频地址
         QMUICommonListItemView pigAvAddressItemWithChevron = qmuiGroupListView.createItemView(getString(R.string.address_pa));
         pigAvAddressItemWithChevron.setOrientation(QMUICommonListItemView.VERTICAL);
-        String pigAvAddress = addressHelper.getPavAddress();
+        String pigAvAddress = presenter.getPavAddress();
         pigAvAddressItemWithChevron.setDetailText(TextUtils.isEmpty(pigAvAddress) ? "未设置" : pigAvAddress);
         pigAvAddressItemWithChevron.setAccessoryType(QMUICommonListItemView.ACCESSORY_TYPE_CHEVRON);
 
@@ -336,7 +333,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
         backAppCompatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resetOrUpdateAddress(key, addressHelper);
+                resetOrUpdateAddress(key);
                 alertDialog.dismiss();
             }
         });
@@ -373,24 +370,23 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
      * 刷新为原地址或者最新地址
      *
      * @param key           key
-     * @param addressHelper add
      */
-    private void resetOrUpdateAddress(String key, AddressHelper addressHelper) {
+    private void resetOrUpdateAddress(String key) {
         switch (key) {
             case AppPreferencesHelper.KEY_SP_PORN_91_VIDEO_ADDRESS:
                 // 全局 BaseUrl 的优先级低于 Domain-Name header 中单独配置的,其他未配置的接口将受全局 BaseUrl 的影响
-                if (!TextUtils.isEmpty(addressHelper.getVideo9PornAddress())) {
-                    RetrofitUrlManager.getInstance().putDomain(Api.PORN9_VIDEO_DOMAIN_NAME, addressHelper.getVideo9PornAddress());
+                if (!TextUtils.isEmpty(presenter.getVideo9PornAddress())) {
+                    RetrofitUrlManager.getInstance().putDomain(Api.PORN9_VIDEO_DOMAIN_NAME, presenter.getVideo9PornAddress());
                 }
                 break;
             case AppPreferencesHelper.KEY_SP_FORUM_91_PORN_ADDRESS:
-                if (!TextUtils.isEmpty(addressHelper.getForum9PornAddress())) {
-                    RetrofitUrlManager.getInstance().putDomain(Api.PORN9_FORUM_DOMAIN_NAME, addressHelper.getForum9PornAddress());
+                if (!TextUtils.isEmpty(presenter.getForum9PornAddress())) {
+                    RetrofitUrlManager.getInstance().putDomain(Api.PORN9_FORUM_DOMAIN_NAME, presenter.getForum9PornAddress());
                 }
                 break;
             case AppPreferencesHelper.KEY_SP_PIG_AV_ADDRESS:
-                if (!TextUtils.isEmpty(addressHelper.getPavAddress())) {
-                    RetrofitUrlManager.getInstance().putDomain(Api.PA_DOMAIN_NAME, addressHelper.getPavAddress());
+                if (!TextUtils.isEmpty(presenter.getPavAddress())) {
+                    RetrofitUrlManager.getInstance().putDomain(Api.PA_DOMAIN_NAME, presenter.getPavAddress());
                 }
                 break;
             default:
@@ -432,7 +428,7 @@ public class SettingActivity extends MvpActivity<SettingView, SettingPresenter> 
                         dialog.dismiss();
                         saveToSpAndUpdateQMUICommonListItemView(key, qmuiCommonListItemView, address);
                         //强制设置，则刷新地址
-                        resetOrUpdateAddress(key, addressHelper);
+                        resetOrUpdateAddress(key);
                     }
                 })
                 .setNegativeButton("返回", new DialogInterface.OnClickListener() {

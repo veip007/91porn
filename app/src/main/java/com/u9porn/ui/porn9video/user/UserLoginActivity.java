@@ -22,12 +22,12 @@ import com.orhanobut.logger.Logger;
 import com.qmuiteam.qmui.util.QMUIKeyboardHelper;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
+import com.u9porn.constants.KeysActivityRequestResultCode;
 import com.u9porn.data.model.User;
 import com.u9porn.ui.MvpActivity;
 import com.u9porn.ui.porn9video.favorite.FavoriteActivity;
 import com.u9porn.ui.porn9video.search.SearchActivity;
 import com.u9porn.ui.setting.SettingActivity;
-import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.DialogUtils;
 import com.u9porn.utils.GlideApp;
 import com.u9porn.constants.Keys;
@@ -41,9 +41,6 @@ import butterknife.ButterKnife;
  * @author flymegoc
  */
 public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> implements UserView {
-
-    public static final int LOGIN_ACTION_FOR_LOOK_MY_FAVORITE = 1;
-    public static final int LOGIN_ACTION_FOR_SEARCH_91PRON_VIDEO = 2;
 
     private static final String TAG = UserLoginActivity.class.getSimpleName();
     @BindView(R.id.et_account)
@@ -69,9 +66,6 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
     private int loginForAction;
 
     @Inject
-    protected AddressHelper addressHelper;
-
-    @Inject
     UserPresenter userPresenter;
 
     @Override
@@ -81,7 +75,7 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
         ButterKnife.bind(this);
         initToolBar(toolbar);
         loginForAction = getIntent().getIntExtra(Keys.KEY_INTENT_LOGIN_FOR_ACTION, 0);
-        if (!TextUtils.isEmpty(addressHelper.getVideo9PornAddress())) {
+        if (!TextUtils.isEmpty(presenter.getVideo9PornAddress())) {
             loadCaptcha();
         }
         btUserLogin.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +120,10 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
 
         alertDialog = DialogUtils.initLoadingDialog(this, "登录中，请稍后...");
         setUpUserInfo();
+
+        if (TextUtils.isEmpty(presenter.getVideo9PornAddress())) {
+            showNeedSetAddressFirstDialog();
+        }
     }
 
     private void setUpUserInfo() {
@@ -163,7 +161,7 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
      * 加载验证码，目前似乎是非必须，不填也是可以登录的
      */
     private void loadCaptcha() {
-        String url = addressHelper.getVideo9PornAddress() + "captcha.php";
+        String url = presenter.getVideo9PornAddress() + "captcha.php";
 
         Logger.t(TAG).d("验证码链接：" + url);
         Uri uri = Uri.parse(url);
@@ -174,10 +172,6 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
     @Override
     public UserPresenter createPresenter() {
         getActivityComponent().inject(this);
-
-        if (TextUtils.isEmpty(addressHelper.getVideo9PornAddress())) {
-            showNeedSetAddressFirstDialog();
-        }
         return userPresenter;
     }
 
@@ -222,15 +216,19 @@ public class UserLoginActivity extends MvpActivity<UserView, UserPresenter> impl
 
     private void switchWhereToGo() {
         switch (loginForAction) {
-            case LOGIN_ACTION_FOR_LOOK_MY_FAVORITE:
+            case KeysActivityRequestResultCode.LOGIN_ACTION_FOR_LOOK_MY_FAVORITE:
                 Intent intent = new Intent(this, FavoriteActivity.class);
                 startActivityWithAnimation(intent);
                 finish();
                 break;
-            case LOGIN_ACTION_FOR_SEARCH_91PRON_VIDEO:
+            case KeysActivityRequestResultCode.LOGIN_ACTION_FOR_SEARCH_91PRON_VIDEO:
                 Intent intentSearch = new Intent(this, SearchActivity.class);
                 startActivityWithAnimation(intentSearch);
                 finish();
+                break;
+            case KeysActivityRequestResultCode.LOGIN_ACTION_FOR_GET_UID:
+                setResult(KeysActivityRequestResultCode.RESULT_CODE_FOR_REFRESH_GET_UID);
+                onBackPressed();
                 break;
             default:
                 setResult(RESULT_OK);

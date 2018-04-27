@@ -37,17 +37,6 @@ public interface CacheProviders {
     Observable<Reply<String>> getIndexPhp(Observable<String> indexPhp, EvictProvider evictProvider);
 
     /**
-     * 缓存播放视频界面，无限制过期时间，除非手动清除
-     *
-     * @param playVideoPage 播放视频页oab
-     * @param viewKey       观看的key
-     * @param evictViewKey  缓存控制
-     * @return oab对象
-     */
-    @ProviderKey("parseVideoUrlSuccess")
-    Observable<Reply<String>> getVideoPlayPage(Observable<String> playVideoPage, DynamicKey viewKey, EvictDynamicKey evictViewKey);
-
-    /**
      * 获取相应类别数据
      *
      * @param getCategoryPage    页码

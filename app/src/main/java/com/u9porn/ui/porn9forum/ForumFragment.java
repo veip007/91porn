@@ -54,9 +54,6 @@ public class ForumFragment extends MvpFragment<ForumView, ForumPresenter> implem
     private Forum9PornAdapter forum91PornAdapter;
 
     @Inject
-    protected AddressHelper addressHelper;
-
-    @Inject
     protected ForumPresenter forumPresenter;
 
     public ForumFragment() {
@@ -71,7 +68,7 @@ public class ForumFragment extends MvpFragment<ForumView, ForumPresenter> implem
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         List<F9PronItem> f9PronItemList = new ArrayList<>();
-        forum91PornAdapter = new Forum9PornAdapter(context, addressHelper, R.layout.item_forum_9_porn, f9PronItemList);
+        forum91PornAdapter = new Forum9PornAdapter(context, presenter.getForum9PornAddress(), R.layout.item_forum_9_porn, f9PronItemList);
     }
 
     @Override

@@ -36,6 +36,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
 import com.u9porn.adapter.VideoCommentAdapter;
+import com.u9porn.constants.KeysActivityRequestResultCode;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.data.db.entity.VideoResult;
 import com.u9porn.data.model.VideoComment;
@@ -179,7 +180,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
 
         if (!presenter.isUserLogin()) {
             showMessage("请先登录帐号", TastyToast.INFO);
-            goToLogin();
+            goToLogin(KeysActivityRequestResultCode.LOGIN_ACTION_FOR_GET_UID);
             return;
         }
         if (v9PornItem.getVideoResultId() == 0) {
@@ -205,8 +206,13 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
 
     private void initData() {
         V9PornItem tmp = presenter.findV9PornItemByViewKey(v9PornItem.getViewKey());
-        if (tmp == null || tmp.getVideoResult() == null) {
-            presenter.loadVideoUrl(v9PornItem);
+        //登录之后，第一次需要刷新获取uid,否则无法使用收藏功能
+        if (tmp == null || tmp.getVideoResultId() == 0 || presenter.isLoadForUid()) {
+            if (tmp == null) {
+                presenter.loadVideoUrl(v9PornItem);
+            } else {
+                presenter.loadVideoUrl(tmp);
+            }
         } else {
             v9PornItem = tmp;
             videoPlayerContainer.setVisibility(View.VISIBLE);
@@ -240,7 +246,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
             @Override
             public void onClick(View v) {
                 if (!presenter.isUserLogin()) {
-                    goToLogin();
+                    goToLogin(0);
                     showMessage("请先登录", TastyToast.INFO);
                     return;
                 }
@@ -578,7 +584,7 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
         }
         VideoResult videoResult = v9PornItem.getVideoResult();
         if (!presenter.isUserLogin()) {
-            goToLogin();
+            goToLogin(KeysActivityRequestResultCode.LOGIN_ACTION_FOR_GET_UID);
             showMessage("请先登录", TastyToast.SUCCESS);
             return;
         }
@@ -606,19 +612,28 @@ public abstract class BasePlayVideo extends MvpActivity<PlayVideoView, PlayVideo
         startActivity(Intent.createChooser(textIntent, "分享视频地址"));
     }
 
-    private void goToLogin() {
+    /**
+     * 去登录
+     *
+     * @param actionKey 登录之后的动作key
+     */
+    private void goToLogin(int actionKey) {
         Intent intent = new Intent(this, UserLoginActivity.class);
-        startActivityWithAnimation(intent);
+        intent.putExtra(Keys.KEY_INTENT_LOGIN_FOR_ACTION, actionKey);
+        startActivityForResultWithAnimation(intent, 0);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == AuthorActivity.AUTHORACTIVITY_RESULT_CODE) {
+        if (resultCode == KeysActivityRequestResultCode.AUTHOR_ACTIVITY_RESULT_CODE) {
             v9PornItem = (V9PornItem) data.getSerializableExtra(Keys.KEY_INTENT_V9PORN_ITEM);
             recyclerViewVideoComment.smoothScrollToPosition(0);
             videoCommentAdapter.getData().clear();
             videoCommentAdapter.notifyDataSetChanged();
             initData();
+        } else if (resultCode == KeysActivityRequestResultCode.RESULT_CODE_FOR_REFRESH_GET_UID) {
+            Logger.t(TAG).d("登录成功，需要刷新以获取uid");
+            presenter.loadVideoUrl(v9PornItem);
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

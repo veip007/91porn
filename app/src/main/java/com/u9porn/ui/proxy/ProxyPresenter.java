@@ -35,13 +35,11 @@ public class ProxyPresenter extends MvpBasePresenter<ProxyView> implements IProx
     private int totalPage = 1;
     private int page = 1;
     private DataManager dataManager;
-    private AddressHelper addressHelper;
 
     @Inject
-    public ProxyPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager, AddressHelper addressHelper) {
+    public ProxyPresenter(LifecycleProvider<Lifecycle.Event> provider, DataManager dataManager) {
         this.provider = provider;
         this.dataManager = dataManager;
-        this.addressHelper = addressHelper;
     }
 
     @Override
@@ -168,7 +166,7 @@ public class ProxyPresenter extends MvpBasePresenter<ProxyView> implements IProx
 
     @Override
     public boolean isSetPorn91VideoAddress() {
-        return TextUtils.isEmpty(addressHelper.getVideo9PornAddress());
+        return TextUtils.isEmpty(dataManager.getPorn9VideoAddress());
     }
 
     @Override

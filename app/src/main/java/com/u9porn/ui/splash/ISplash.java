@@ -16,4 +16,6 @@ public interface ISplash extends IBaseUser{
     String getPorn9VideoLoginUserPassword();
 
     boolean isPorn9VideoUserAutoLogin();
+
+    String getVideo9PornAddress();
 }

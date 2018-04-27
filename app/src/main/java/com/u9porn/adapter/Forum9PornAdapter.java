@@ -19,7 +19,6 @@ import com.qmuiteam.qmui.span.QMUIAlignMiddleImageSpan;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.u9porn.R;
 import com.u9porn.data.model.F9PronItem;
-import com.u9porn.utils.AddressHelper;
 import com.u9porn.utils.GlideApp;
 
 import java.util.List;
@@ -31,18 +30,19 @@ import java.util.List;
 
 public class Forum9PornAdapter extends BaseQuickAdapter<F9PronItem, Forum9PornAdapter.ViewHolder> {
     private Context context;
-    private AddressHelper addressHelper;
-    public Forum9PornAdapter(Context context, AddressHelper addressHelper , int layoutResId, @Nullable List<F9PronItem> data) {
+    private String forum9PornAddress;
+
+    public Forum9PornAdapter(Context context, String forum9PornAddress , int layoutResId, @Nullable List<F9PronItem> data) {
         super(layoutResId, data);
         this.context = context;
-        this.addressHelper=addressHelper;
+        this.forum9PornAddress=forum9PornAddress;
     }
 
     @Override
     protected void convert(final ViewHolder helper, final F9PronItem item) {
         final String title = "  " + item.getTitle() + "      " + (TextUtils.isEmpty(item.getAgreeCount()) ? " " : item.getAgreeCount());
         helper.spannableString = SpannableString.valueOf(title);
-        GlideApp.with(context).asDrawable().load(Uri.parse(addressHelper.getForum9PornAddress() + item.getFolder())).into(new SimpleTarget<Drawable>() {
+        GlideApp.with(context).asDrawable().load(Uri.parse(forum9PornAddress + item.getFolder())).into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                 resource.setBounds(0, 0, QMUIDisplayHelper.px2dp(context, 150), QMUIDisplayHelper.px2dp(context, 150));
@@ -52,7 +52,7 @@ public class Forum9PornAdapter extends BaseQuickAdapter<F9PronItem, Forum9PornAd
             }
         });
         if (!TextUtils.isEmpty(item.getIcon())) {
-            GlideApp.with(context).asDrawable().load(Uri.parse(addressHelper.getForum9PornAddress() + item.getIcon())).into(new SimpleTarget<Drawable>() {
+            GlideApp.with(context).asDrawable().load(Uri.parse(forum9PornAddress + item.getIcon())).into(new SimpleTarget<Drawable>() {
                 @Override
                 public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                     resource.setBounds(0, 0, QMUIDisplayHelper.px2dp(context, 150), QMUIDisplayHelper.px2dp(context, 150));
@@ -66,7 +66,7 @@ public class Forum9PornAdapter extends BaseQuickAdapter<F9PronItem, Forum9PornAd
             for (int i = 0; i < item.getImageList().size(); i++) {
                 final int j = i;
                 String url = item.getImageList().get(i);
-                GlideApp.with(context).asDrawable().load(Uri.parse(addressHelper.getForum9PornAddress() + url)).into(new SimpleTarget<Drawable>() {
+                GlideApp.with(context).asDrawable().load(Uri.parse(forum9PornAddress + url)).into(new SimpleTarget<Drawable>() {
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
                         resource.setBounds(0, 0, QMUIDisplayHelper.px2dp(context, 150), QMUIDisplayHelper.px2dp(context, 150));

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.qmuiteam.qmui.widget.grouplist.QMUICommonListItemView;
 import com.qmuiteam.qmui.widget.grouplist.QMUIGroupListView;
 import com.u9porn.R;
+import com.u9porn.constants.KeysActivityRequestResultCode;
 import com.u9porn.data.model.User;
 import com.u9porn.ui.MvpFragment;
 import com.u9porn.ui.about.AboutActivity;
@@ -319,7 +320,7 @@ public class MineFragment extends MvpFragment<MineView, MinePresenter> implement
         if (content.equals(myFavoriteStr)) {
             if (!presenter.isUserLogin()) {
                 Intent intent = new Intent(context, UserLoginActivity.class);
-                intent.putExtra(Keys.KEY_INTENT_LOGIN_FOR_ACTION, UserLoginActivity.LOGIN_ACTION_FOR_LOOK_MY_FAVORITE);
+                intent.putExtra(Keys.KEY_INTENT_LOGIN_FOR_ACTION, KeysActivityRequestResultCode.LOGIN_ACTION_FOR_LOOK_MY_FAVORITE);
                 startActivityForResultWithAnimation(intent, Constants.USER_LOGIN_REQUEST_CODE);
                 return;
             }

@@ -42,11 +42,6 @@ public class ActivityModule {
     }
 
     @Provides
-    File providesVideoCacheDir(@ActivityContext Context context) {
-        return AppCacheUtils.getVideoCacheDir(context);
-    }
-
-    @Provides
     List<Fragment> providesFragmentList() {
         return new ArrayList<>();
     }

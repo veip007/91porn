@@ -25,9 +25,6 @@ public class SplashActivity extends MvpActivity<SplashView, SplashPresenter> imp
     private static final String TAG = SplashActivity.class.getSimpleName();
 
     @Inject
-    protected AddressHelper addressHelper;
-
-    @Inject
     protected SplashPresenter splashPresenter;
 
     @Override
@@ -52,7 +49,7 @@ public class SplashActivity extends MvpActivity<SplashView, SplashPresenter> imp
 
         boolean isAutoLogin = presenter.isPorn9VideoUserAutoLogin();
 
-        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password) && isAutoLogin && !TextUtils.isEmpty(addressHelper.getVideo9PornAddress())) {
+        if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password) && isAutoLogin && !TextUtils.isEmpty(presenter.getVideo9PornAddress())) {
             String captcha = UserHelper.randomCaptcha();
             login(username, password, captcha);
         } else {

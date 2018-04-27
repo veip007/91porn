@@ -16,6 +16,7 @@ import com.helper.loadviewhelper.load.LoadViewHelper;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.u9porn.R;
 import com.u9porn.adapter.V91PornAdapter;
+import com.u9porn.constants.KeysActivityRequestResultCode;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.ui.MvpActivity;
 import com.u9porn.utils.LoadHelperUtils;
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
  * @author flymegoc
  */
 public class AuthorActivity extends MvpActivity<AuthorView, AuthorPresenter> implements AuthorView {
-    public static final int AUTHORACTIVITY_RESULT_CODE = 1;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.recyclerView)
@@ -80,7 +81,7 @@ public class AuthorActivity extends MvpActivity<AuthorView, AuthorPresenter> imp
                 V9PornItem v9PornItems = (V9PornItem) adapter.getData().get(position);
                 Intent intent = new Intent();
                 intent.putExtra(Keys.KEY_INTENT_V9PORN_ITEM, v9PornItems);
-                setResult(AUTHORACTIVITY_RESULT_CODE, intent);
+                setResult(KeysActivityRequestResultCode.AUTHOR_ACTIVITY_RESULT_CODE, intent);
                 onBackPressed();
             }
         });

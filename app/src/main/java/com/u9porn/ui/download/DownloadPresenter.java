@@ -1,6 +1,7 @@
 package com.u9porn.ui.download;
 
 import android.arch.lifecycle.Lifecycle;
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -14,9 +15,11 @@ import com.trello.rxlifecycle2.LifecycleProvider;
 import com.u9porn.data.DataManager;
 import com.u9porn.data.db.entity.V9PornItem;
 import com.u9porn.data.db.entity.VideoResult;
+import com.u9porn.di.ApplicationContext;
 import com.u9porn.di.PerActivity;
 import com.u9porn.rxjava.CallBackWrapper;
 import com.u9porn.rxjava.RxSchedulersHelper;
+import com.u9porn.utils.AppCacheUtils;
 import com.u9porn.utils.DownloadManager;
 import com.u9porn.utils.VideoCacheFileNameGenerator;
 
@@ -47,14 +50,13 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
 
     private DataManager dataManager;
     private LifecycleProvider<Lifecycle.Event> provider;
-
-    private File videoCacheDir;
+    private Context context;
 
     @Inject
-    public DownloadPresenter(DataManager dataManager, LifecycleProvider<Lifecycle.Event> provider, File videoCacheDir) {
+    public DownloadPresenter(DataManager dataManager, LifecycleProvider<Lifecycle.Event> provider, @ApplicationContext Context context) {
         this.dataManager = dataManager;
         this.provider = provider;
-        this.videoCacheDir = videoCacheDir;
+        this.context = context;
     }
 
     @Override
@@ -102,7 +104,7 @@ public class DownloadPresenter extends MvpBasePresenter<DownloadView> implements
         //如果已经缓存完成，直接使用缓存代理完成
         if (dataManager.isVideoCacheByProxy(videoResult.getVideoUrl())) {
             try {
-                copyCacheFile(videoCacheDir, tmp, downloadListener);
+                copyCacheFile(AppCacheUtils.getVideoCacheDir(context), tmp, downloadListener);
             } catch (IOException e) {
                 if (downloadListener != null) {
                     downloadListener.onError("缓存文件错误，无法拷贝");

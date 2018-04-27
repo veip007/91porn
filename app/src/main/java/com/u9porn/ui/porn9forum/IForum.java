@@ -9,4 +9,6 @@ public interface IForum {
     void loadForumIndexListData(boolean pullToRefresh);
 
     void loadForumListData(boolean pullToRefresh,String fid);
+
+    String getForum9PornAddress();
 }
