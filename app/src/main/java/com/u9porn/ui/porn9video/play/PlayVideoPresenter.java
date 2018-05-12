@@ -98,12 +98,7 @@ public class PlayVideoPresenter extends MvpBasePresenter<PlayVideoView> implemen
                         ifViewAttached(new ViewAction<PlayVideoView>() {
                             @Override
                             public void run(@NonNull PlayVideoView view) {
-                                if (v9PornItem.getVideoResultId() == 0) {
-                                    view.parseVideoUrlSuccess(saveVideoUrl(videoResult, v9PornItem));
-                                } else {
-                                    Logger.t(TAG).d("此次解析仅为了uid，无需重新保存");
-                                    view.parseVideoUrlSuccess(v9PornItem);
-                                }
+                                view.parseVideoUrlSuccess(saveVideoUrl(videoResult, v9PornItem));
                             }
                         });
                     }

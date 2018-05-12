@@ -190,7 +190,7 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
     private void notifySystemGallery(File file) {
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.u91porn.fileprovider", file);
+            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.u9porn.fileprovider", file);
         } else {
             uri = Uri.fromFile(file);
         }
