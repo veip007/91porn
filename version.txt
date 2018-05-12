@@ -1,6 +1,7 @@
 {
 "apkDownloadUrl": "https://github.com/techGay/v9porn/blob/master/apk/app-v1.0.1.apk",
-"updateMessage": "1. 适配8.0通知栏\n
+"updateMessage": "注意：需要手动下载apk并卸载重新安装，否则下版本无法自动更新\n
+                  1. 适配8.0通知栏\n
                   2. 修复登录后播放我的收藏视频崩溃的bug\n
                   3. 修复因修改包名导致保存图片引发崩溃的bug\n
                   4. 其他细小bug

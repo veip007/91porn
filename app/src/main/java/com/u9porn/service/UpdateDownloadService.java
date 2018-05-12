@@ -88,7 +88,7 @@ public class UpdateDownloadService extends Service {
                 return START_NOT_STICKY;
             }
         }
-        path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DOWNLOADS + "/91porn_" + updateVersion.getVersionName() + ".apk";
+        path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Environment.DIRECTORY_DOWNLOADS + "/v9porn_" + updateVersion.getVersionName() + ".apk";
         if (BuildConfig.DEBUG) {
             File file = new File(path);
             file.delete();
@@ -149,7 +149,7 @@ public class UpdateDownloadService extends Service {
         File file = new File(path);
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(getApplicationContext(), "com.u91porn.fileprovider", file);
+            uri = FileProvider.getUriForFile(getApplicationContext(), "com.u9porn.fileprovider", file);
         } else {
             uri = Uri.fromFile(file);
         }

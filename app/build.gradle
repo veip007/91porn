@@ -31,7 +31,7 @@ greendao {
 }
 
 bugsnag {
-    autoUpload true //自动上传ProGuard mapping file
+    autoUpload false //自动上传ProGuard mapping file
     ndk false //上传ndk mapping
     autoReportBuilds false //report builds to Bugsnag
     retryCount 5 //Retrying the file upload

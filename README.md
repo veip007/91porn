@@ -13,7 +13,7 @@ rxjava+retrofit+rxcache+mvp+jsoup+dagger2
 2. 修复登录后播放我的收藏视频崩溃的bug
 3. 修复因修改包名导致保存图片引发崩溃的bug
 4. 其他细小bug
-
+注意：需要手动下载apk并卸载重新安装，否则下版本无法自动更新
 ### 编译环境
 
 请用最新版AndroidStudio（至少3.0以上），个人本地基本都是有更新就更新
