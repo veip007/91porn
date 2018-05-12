@@ -15,6 +15,7 @@ rxjava+retrofit+rxcache+mvp+jsoup+dagger2
 4. 其他细小bug
 
 ### 编译环境
+
 请用最新版AndroidStudio（至少3.0以上），个人本地基本都是有更新就更新
 
 当前版本：
