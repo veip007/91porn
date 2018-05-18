@@ -100,7 +100,7 @@ public class PictureViewerActivity extends MvpActivity<PictureViewerView, Pictur
         }
         Mm99 mm99 = (Mm99) getIntent().getSerializableExtra(Keys.KEY_INTENT_99_MM_ITEM);
         if (mm99 != null) {
-            presenter.list99MmPicture(mm99.getId(), mm99.getImgUrl(), false);
+            presenter.list99MmPicture(mm99.getId(), mm99.getContentUrl(), false);
         }
     }
 

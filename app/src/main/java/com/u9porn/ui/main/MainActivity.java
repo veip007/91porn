@@ -507,7 +507,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
             FileDownloader.getImpl().pauseAll();
             FileDownloader.getImpl().unBindService();
             //没啥意义
-            if (!existActivityWithAnimation) {
+            if (!existActivityWithAnimation && !isFinishing()) {
                 super.onBackPressed();
             }
             finishAffinity();
